@@ -4,13 +4,15 @@
   <head>
     <meta charset="utf-8">
     <title>Save Elon's model-X!</title>
-    <link rel=stylesheet href="./reset.css">
-    <link rel=stylesheet href="./game.css">
+    <link rel=stylesheet href="./app/assets/stylesheets/reset.css">
+    <link rel=stylesheet href="./app/assets/stylesheets/game.css">
   </head>
   <body>
 
-
-    <canvas class="canvas" width="1100" height="700"/>
+    <div id="canvas-wrapper">
+      <canvas id="canvas-background" width="1100" height="700"/>
+      <canvas id="canvas-car" width="1100" height="700"/>
+    </div>
   </body>
     <script type="text/javascript" src='./app/assets/javascripts/bundle.js'></script>
 </html>

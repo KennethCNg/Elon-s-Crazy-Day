@@ -4,12 +4,11 @@ import Car from './lib/car';
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
 
-  var canvas = document.querySelector("canvas");
-  canvas.height = 960;
-  canvas.length = 540;
-  var ctx = canvas.getContext("2d");
+  var background = document.getElementById("canvas-background");
+  var ctx = background.getContext("2d");
+  background.borders = background.width / 4;
 
-  const game = new Game(ctx);
+  const game = new Game(ctx, background);
   const car = game.car;
   window.car = car;
   window.ctx = ctx;
@@ -17,17 +16,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
   document.addEventListener("keydown",function(e) {
     switch (e.key) {
       case "ArrowLeft":
-      car.move(-20);
-      break;
+        game.render();
+        car.move(-25, 0);
+        break;
       case "ArrowRight":
-      car.move(20);
-      break;
-      // case "ArrowUp":
-      // player.y -= 2;
-      // break;
-      // case "ArrowDown":
-      // player.y += 2;
-      // break;
+        game.render();
+        car.move(25, 0);
+        break;
+      case "ArrowUp":
+        game.render();
+        car.move(0, -50);
+        break;
+      case "ArrowDown":
+        game.render();
+        car.move(0, 50);
+        break;
     }
   });
 

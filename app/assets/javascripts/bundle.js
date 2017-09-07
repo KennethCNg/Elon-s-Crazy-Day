@@ -83,12 +83,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener("DOMContentLoaded", function (event) {
   console.log("DOM fully loaded and parsed");
 
-  var canvas = document.querySelector("canvas");
-  canvas.height = 960;
-  canvas.length = 540;
-  var ctx = canvas.getContext("2d");
+  var background = document.getElementById("canvas-background");
+  var ctx = background.getContext("2d");
+  background.borders = background.width / 4;
 
-  var game = new _game2.default(ctx);
+  var game = new _game2.default(ctx, background);
   var car = game.car;
   window.car = car;
   window.ctx = ctx;
@@ -96,17 +95,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
   document.addEventListener("keydown", function (e) {
     switch (e.key) {
       case "ArrowLeft":
-        car.move(-20);
+        game.render();
+        car.move(-25, 0);
         break;
       case "ArrowRight":
-        car.move(20);
+        game.render();
+        car.move(25, 0);
         break;
-      // case "ArrowUp":
-      // player.y -= 2;
-      // break;
-      // case "ArrowDown":
-      // player.y += 2;
-      // break;
+      case "ArrowUp":
+        game.render();
+        car.move(0, -50);
+        break;
+      case "ArrowDown":
+        game.render();
+        car.move(0, 50);
+        break;
     }
   });
 
@@ -138,6 +141,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _car = __webpack_require__(2);
 
 var _car2 = _interopRequireDefault(_car);
@@ -146,13 +151,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Game = function Game(ctx) {
-  _classCallCheck(this, Game);
+var Game = function () {
+  function Game(ctx, background) {
+    _classCallCheck(this, Game);
 
-  this.ctx = ctx;
-  this.car = new _car2.default(ctx);
-  this.car.render();
-};
+    this.background = background;
+    this.ctx = ctx;
+    this.car = new _car2.default(ctx);
+    this.backgrounddividers = background.width / 4;
+    this.car.render();
+    this.render();
+  }
+
+  _createClass(Game, [{
+    key: 'render',
+    value: function render() {
+      this.ctx.fillStyle = 'green';
+      this.ctx.fillRect(0, 0, this.backgrounddividers, this.background.height);
+      this.ctx.fillRect(this.backgrounddividers * 3, 0, this.backgrounddividers, this.background.height);
+      this.ctx.fillStyle = 'yellow';
+      this.ctx.fillRect(this.backgrounddividers * 2, 0, 2, this.background.height);
+    }
+  }]);
+
+  return Game;
+}();
 
 exports.default = Game;
 
@@ -173,37 +196,48 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Car = function () {
   function Car(ctx) {
+    var _this = this;
+
     _classCallCheck(this, Car);
 
+    this.ctx = ctx;
     var image = new Image();
     image.src = "./app/assets/images/Tesla.png";
-    this.ctx = ctx;
     this.image = image;
+    this.height = 100;
+    this.width = 100;
+    this.sx = 78;
+    this.sy = 25;
+    this.sWidth = 100;
+    this.sHeight = 217;
+    this.xPos = 500;
+    this.yPos = 500;
+    this.dWidth = 25;
+    this.dHeight = 50;
     image.onload = function () {
-      ctx.drawImage(image, 230, 230, 100, 100);
+      ctx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
     };
-    this.xPos = 230;
-    this.yPos = 230;
   }
 
   _createClass(Car, [{
     key: "move",
-    value: function move(dx) {
-      this.xPos += dx;
+    value: function move(dx, dy) {
       this.clear();
+      this.xPos += dx;
+      this.yPos += dy;
       this.render();
     }
   }, {
     key: "render",
     value: function render() {
-      this.ctx.fillStyle = 'white';
-      this.ctx.fillRect(this.xPos, this.yPos, 100, 100);
-      this.ctx.drawImage(this.image, this.xPos, this.yPos, 100, 100);
+      this.ctx.fillStyle = 'grey';
+      this.ctx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
+      this.ctx.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.xPos, this.yPos, this.dWidth, this.dHeight);
     }
   }, {
     key: "clear",
     value: function clear() {
-      this.ctx.clearRect(this.xPos, this.yPos, 100, 100);
+      this.ctx.clearRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
     }
   }]);
 

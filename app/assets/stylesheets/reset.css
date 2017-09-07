@@ -19,8 +19,8 @@ time, mark, audio, video {
 	vertical-align: baseline;
 	font-family: "PT Sans", sans-serif;
 	letter-spacing: .3px;
-}
-/* HTML5 display-role reset for older browsers */
+}*/
+ HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
