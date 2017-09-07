@@ -83,24 +83,30 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener("DOMContentLoaded", function (event) {
   console.log("DOM fully loaded and parsed");
 
+  // background
   var background = document.getElementById("canvas-background");
-  var ctx = background.getContext("2d");
+  var bgCtx = background.getContext("2d");
   background.borders = background.width / 4;
+  window.bgCtx = bgCtx;
 
-  var game = new _game2.default(ctx, background);
-  var car = game.car;
-  window.car = car;
-  window.ctx = ctx;
+  // cars
+  var cars = document.getElementById("canvas-car");
+  var carCtx = background.getContext("2d");
+  window.carCtx = carCtx;
+  var game = new _game2.default(bgCtx, background, carCtx);
+  var car = game.car; // need this after instance of game is made
+
 
   document.addEventListener("keydown", function (e) {
+    e.preventDefault();
     switch (e.key) {
       case "ArrowLeft":
         game.render();
-        car.move(-25, 0);
+        car.move(-75, 0);
         break;
       case "ArrowRight":
         game.render();
-        car.move(25, 0);
+        car.move(75, 0);
         break;
       case "ArrowUp":
         game.render();
@@ -112,22 +118,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         break;
     }
   });
-
-  // Testing
-  // var textX = 50;
-  // var textY = 50;
-  //
-  // function update() {
-  //   textX += 1;
-  // }
-
-  // function draw() {
-  // ctx.clearRect(0, 0, 1300, 900);
-  //  ctx.fillRect(240,40,960,540);
-  //  ctx.fillText("Sup Bro!", textX, textY);
-  // player.draw();
-  // image.draw();
-  // };
 });
 
 /***/ }),
@@ -152,25 +142,38 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Game = function () {
-  function Game(ctx, background) {
+  function Game(bgCtx, background, carCtx) {
     _classCallCheck(this, Game);
 
     this.background = background;
-    this.ctx = ctx;
-    this.car = new _car2.default(ctx);
-    this.backgrounddividers = background.width / 4;
-    this.car.render();
+    this.bgCtx = bgCtx;
+    this.car = new _car2.default(carCtx);
+    this.backgroundDividers = background.width / 4;
     this.render();
+    this.car.render();
   }
 
   _createClass(Game, [{
     key: 'render',
     value: function render() {
-      this.ctx.fillStyle = 'green';
-      this.ctx.fillRect(0, 0, this.backgrounddividers, this.background.height);
-      this.ctx.fillRect(this.backgrounddividers * 3, 0, this.backgrounddividers, this.background.height);
-      this.ctx.fillStyle = 'yellow';
-      this.ctx.fillRect(this.backgrounddividers * 2, 0, 2, this.background.height);
+      this.bgCtx.fillStyle = 'green';
+      this.bgCtx.fillRect(0, 0, this.backgroundDividers, this.background.height);
+      this.bgCtx.fillRect(this.backgroundDividers * 3, 0, this.backgroundDividers, this.background.height);
+      this.bgCtx.fillStyle = 'gray';
+      this.bgCtx.fillRect(this.backgroundDividers, 0, this.backgroundDividers, this.background.height);
+      this.bgCtx.fillRect(this.backgroundDividers * 2, 0, this.backgroundDividers, this.background.height);
+      this.bgCtx.beginPath();
+      this.bgCtx.setLineDash([20, 60]);
+      this.bgCtx.strokeStyle = "yellow";
+      this.bgCtx.moveTo(this.backgroundDividers * 1.5, 0);
+      this.bgCtx.lineTo(this.backgroundDividers * 1.5, 700);
+      this.bgCtx.stroke();
+      this.bgCtx.moveTo(this.backgroundDividers * 2, 0);
+      this.bgCtx.lineTo(this.backgroundDividers * 2, 700);
+      this.bgCtx.stroke();
+      this.bgCtx.moveTo(this.backgroundDividers * 2.5, 0);
+      this.bgCtx.lineTo(this.backgroundDividers * 2.5, 700);
+      this.bgCtx.stroke();
     }
   }]);
 
@@ -195,12 +198,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Car = function () {
-  function Car(ctx) {
+  function Car(carCtx) {
     var _this = this;
 
     _classCallCheck(this, Car);
 
-    this.ctx = ctx;
+    this.carCtx = carCtx;
     var image = new Image();
     image.src = "./app/assets/images/Tesla.png";
     this.image = image;
@@ -210,34 +213,41 @@ var Car = function () {
     this.sy = 25;
     this.sWidth = 100;
     this.sHeight = 217;
-    this.xPos = 500;
+    this.xPos = 450;
     this.yPos = 500;
-    this.dWidth = 25;
-    this.dHeight = 50;
+    this.dWidth = 50;
+    this.dHeight = 100;
     image.onload = function () {
-      ctx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
     };
   }
 
   _createClass(Car, [{
     key: "move",
     value: function move(dx, dy) {
-      this.clear();
+      if (!this.checkValidMove(dx, dy)) {
+        dy = 0;
+        dx = 0;
+      }
       this.xPos += dx;
       this.yPos += dy;
       this.render();
     }
   }, {
-    key: "render",
-    value: function render() {
-      this.ctx.fillStyle = 'grey';
-      this.ctx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
-      this.ctx.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.xPos, this.yPos, this.dWidth, this.dHeight);
+    key: "checkValidMove",
+    value: function checkValidMove(dx, dy) {
+      if (this.xPos + dx <= 225 || this.xPos + dx > 750) {
+        return false;
+      } else if (this.yPos + dy > 600 || this.yPos + dy < 0) {
+        return false;
+      } else {
+        return true;
+      }
     }
   }, {
-    key: "clear",
-    value: function clear() {
-      this.ctx.clearRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
+    key: "render",
+    value: function render() {
+      this.carCtx.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.xPos, this.yPos, this.dWidth, this.dHeight);
     }
   }]);
 

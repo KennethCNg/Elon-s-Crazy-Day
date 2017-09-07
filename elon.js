@@ -4,24 +4,30 @@ import Car from './lib/car';
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
 
+  // background
   var background = document.getElementById("canvas-background");
-  var ctx = background.getContext("2d");
+  var bgCtx = background.getContext("2d");
   background.borders = background.width / 4;
+  window.bgCtx = bgCtx;
 
-  const game = new Game(ctx, background);
-  const car = game.car;
-  window.car = car;
-  window.ctx = ctx;
+  // cars
+  var cars = document.getElementById("canvas-car");
+  var carCtx = background.getContext("2d");
+  window.carCtx = carCtx;
+  const game = new Game(bgCtx, background, carCtx);
+  const car = game.car; // need this after instance of game is made
+
 
   document.addEventListener("keydown",function(e) {
+    e.preventDefault();
     switch (e.key) {
       case "ArrowLeft":
         game.render();
-        car.move(-25, 0);
+        car.move(-75, 0);
         break;
       case "ArrowRight":
         game.render();
-        car.move(25, 0);
+        car.move(75, 0);
         break;
       case "ArrowUp":
         game.render();
@@ -33,22 +39,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
         break;
     }
   });
-
-
-  // Testing
-  // var textX = 50;
-  // var textY = 50;
-  //
-  // function update() {
-  //   textX += 1;
-  // }
-
-  // function draw() {
-    // ctx.clearRect(0, 0, 1300, 900);
-  //  ctx.fillRect(240,40,960,540);
-  //  ctx.fillText("Sup Bro!", textX, textY);
-    // player.draw();
-    // image.draw();
-  // };
-
 });
