@@ -94,7 +94,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var carCtx = background.getContext("2d");
   window.carCtx = carCtx;
   var game = new _game2.default(bgCtx, background, carCtx);
-  var car = game.car; // need this after instance of game is made
+  var player = game.player; // need this after instance of game is made
+
+  // player
 
 
   document.addEventListener("keydown", function (e) {
@@ -102,19 +104,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
     switch (e.key) {
       case "ArrowLeft":
         game.render();
-        car.move(-75, 0);
+        player.move(-75, 0);
         break;
       case "ArrowRight":
         game.render();
-        car.move(75, 0);
+        player.move(75, 0);
         break;
       case "ArrowUp":
         game.render();
-        car.move(0, -50);
+        player.move(0, -50);
         break;
       case "ArrowDown":
         game.render();
-        car.move(0, 50);
+        player.move(0, 50);
         break;
     }
   });
@@ -137,6 +139,10 @@ var _car = __webpack_require__(2);
 
 var _car2 = _interopRequireDefault(_car);
 
+var _player = __webpack_require__(4);
+
+var _player2 = _interopRequireDefault(_player);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -147,15 +153,20 @@ var Game = function () {
 
     this.background = background;
     this.bgCtx = bgCtx;
-    this.car = new _car2.default(carCtx);
+    this.player = new _player2.default(carCtx);
     this.backgroundDividers = background.width / 4;
     this.render();
-    this.car.render();
+    this.player.render();
   }
 
   _createClass(Game, [{
     key: 'render',
     value: function render() {
+      this.renderBackground();
+    }
+  }, {
+    key: 'renderBackground',
+    value: function renderBackground() {
       this.bgCtx.fillStyle = 'green';
       this.bgCtx.fillRect(0, 0, this.backgroundDividers, this.background.height);
       this.bgCtx.fillRect(this.backgroundDividers * 3, 0, this.backgroundDividers, this.background.height);
@@ -255,6 +266,44 @@ var Car = function () {
 }();
 
 exports.default = Car;
+
+/***/ }),
+/* 3 */,
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(2);
+
+var _car2 = _interopRequireDefault(_car);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Player = function (_Car) {
+  _inherits(Player, _Car);
+
+  function Player(carCtx) {
+    _classCallCheck(this, Player);
+
+    return _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this, carCtx));
+  }
+
+  return Player;
+}(_car2.default);
+
+exports.default = Player;
 
 /***/ })
 /******/ ]);

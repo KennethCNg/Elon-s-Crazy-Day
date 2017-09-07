@@ -15,7 +15,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var carCtx = background.getContext("2d");
   window.carCtx = carCtx;
   const game = new Game(bgCtx, background, carCtx);
-  const car = game.car; // need this after instance of game is made
+  const player = game.player; // need this after instance of game is made
+
+  // player
 
 
   document.addEventListener("keydown",function(e) {
@@ -23,19 +25,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     switch (e.key) {
       case "ArrowLeft":
         game.render();
-        car.move(-75, 0);
+        player.move(-75, 0);
         break;
       case "ArrowRight":
         game.render();
-        car.move(75, 0);
+        player.move(75, 0);
         break;
       case "ArrowUp":
         game.render();
-        car.move(0, -50);
+        player.move(0, -50);
         break;
       case "ArrowDown":
         game.render();
-        car.move(0, 50);
+        player.move(0, 50);
         break;
     }
   });
