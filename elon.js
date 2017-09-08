@@ -1,5 +1,6 @@
 import Game from './lib/game';
 import Car from './lib/car';
+import GameView from './lib/game_view';
 
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   window.carCtx = carCtx;
   const game = new Game(bgCtx, background, carCtx);
   const player = game.player; // need this after instance of game is made
+  game.start();
 
   // player
 
@@ -24,19 +26,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     e.preventDefault();
     switch (e.key) {
       case "ArrowLeft":
-        game.render();
+        // game.render();
         player.move(-75, 0);
         break;
       case "ArrowRight":
-        game.render();
+        // game.render();
         player.move(75, 0);
         break;
       case "ArrowUp":
-        game.render();
+        // game.render();
         player.move(0, -50);
         break;
       case "ArrowDown":
-        game.render();
+        // game.render();
         player.move(0, 50);
         break;
     }
