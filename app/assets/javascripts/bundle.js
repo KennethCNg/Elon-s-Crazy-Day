@@ -156,36 +156,71 @@ var Game = function () {
   function Game(bgCtx, background, carCtx) {
     _classCallCheck(this, Game);
 
-    // render background
+    // create background
     this.background = background;
     this.bgCtx = bgCtx;
     this.carCtx = carCtx;
-
     this.backgroundDividers = background.width / 4;
-    // this.render();
 
-    // render player
-    this.player = new _player2.default(carCtx);
-    this.car = new _car2.default(carCtx);
+    this.cars = [];
+    // create player
+    var player = new _player2.default(this.carCtx);
+    this.player = player;
+    this.cars.push(player);
   }
+  // start game
+
 
   _createClass(Game, [{
     key: 'start',
     value: function start() {
-      this.car.render();
+      this.generateCar();
+      // one car is *potentially* made every second
+      var intervalId = setInterval(this.initializeCarGenerator.bind(this), 1000);
+      this.renderCars();
+
       requestAnimationFrame(this.animate.bind(this));
     }
+
+    // redraws at 60FPS
+
   }, {
     key: 'animate',
     value: function animate(time) {
       this.renderBackground();
-      this.player.render();
+      this.renderCars();
 
       requestAnimationFrame(this.animate.bind(this));
     }
+
+    // redraws all cars on the screen
+
+  }, {
+    key: 'renderCars',
+    value: function renderCars() {
+      this.cars.forEach(function (car) {
+        return car.render();
+      });
+    }
+
+    //cars are generated at random
+
+  }, {
+    key: 'initializeCarGenerator',
+    value: function initializeCarGenerator() {
+      var prob = Math.floor(Math.random() * 5000);
+      if (prob < 300 || prob > 4000) {
+        return this.initializeCarGenerator();
+      } else {
+        var IntervalId = setTimeout(this.generateCar.bind(this), prob);
+      }
+    }
   }, {
     key: 'generateCar',
-    value: function generateCar() {}
+    value: function generateCar() {
+      var car = new _car2.default(this.carCtx);
+      this.cars.push(car);
+    }
   }, {
     key: 'renderBackground',
     value: function renderBackground() {
