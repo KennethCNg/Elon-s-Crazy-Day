@@ -60,198 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _game = __webpack_require__(1);
-
-var _game2 = _interopRequireDefault(_game);
-
-var _car = __webpack_require__(2);
-
-var _car2 = _interopRequireDefault(_car);
-
-var _game_view = __webpack_require__(5);
-
-var _game_view2 = _interopRequireDefault(_game_view);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.addEventListener("DOMContentLoaded", function (event) {
-  console.log("DOM fully loaded and parsed");
-
-  // background
-  var background = document.getElementById("canvas-background");
-  var bgCtx = background.getContext("2d");
-  background.borders = background.width / 4;
-  window.bgCtx = bgCtx;
-
-  // cars
-  var cars = document.getElementById("canvas-car");
-  var carCtx = background.getContext("2d");
-  window.carCtx = carCtx;
-  var game = new _game2.default(bgCtx, background, carCtx);
-  var player = game.player; // need this after instance of game is made
-  game.start();
-
-  // player
-
-
-  document.addEventListener("keydown", function (e) {
-    e.preventDefault();
-    switch (e.key) {
-      case "ArrowLeft":
-        // game.render();
-        player.move(-75, 0);
-        break;
-      case "ArrowRight":
-        // game.render();
-        player.move(75, 0);
-        break;
-      case "ArrowUp":
-        // game.render();
-        player.move(0, -50);
-        break;
-      case "ArrowDown":
-        // game.render();
-        player.move(0, 50);
-        break;
-    }
-  });
-});
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _car = __webpack_require__(2);
-
-var _car2 = _interopRequireDefault(_car);
-
-var _player = __webpack_require__(4);
-
-var _player2 = _interopRequireDefault(_player);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Game = function () {
-  function Game(bgCtx, background, carCtx) {
-    _classCallCheck(this, Game);
-
-    // create background
-    this.background = background;
-    this.bgCtx = bgCtx;
-    this.carCtx = carCtx;
-    this.backgroundDividers = background.width / 4;
-
-    this.cars = [];
-    // create player
-    var player = new _player2.default(this.carCtx);
-    this.player = player;
-    this.cars.push(player);
-  }
-  // start game
-
-
-  _createClass(Game, [{
-    key: 'start',
-    value: function start() {
-      this.generateCar();
-      // one car is *potentially* made every second
-      var intervalId = setInterval(this.initializeCarGenerator.bind(this), 1000);
-      this.renderCars();
-
-      requestAnimationFrame(this.animate.bind(this));
-    }
-
-    // redraws at 60FPS
-
-  }, {
-    key: 'animate',
-    value: function animate(time) {
-      this.renderBackground();
-      this.renderCars();
-
-      requestAnimationFrame(this.animate.bind(this));
-    }
-
-    // redraws all cars on the screen
-
-  }, {
-    key: 'renderCars',
-    value: function renderCars() {
-      this.cars.forEach(function (car) {
-        return car.render();
-      });
-    }
-
-    //cars are generated at random
-
-  }, {
-    key: 'initializeCarGenerator',
-    value: function initializeCarGenerator() {
-      var prob = Math.floor(Math.random() * 5000);
-      if (prob < 300 || prob > 4000) {
-        return this.initializeCarGenerator();
-      } else {
-        var IntervalId = setTimeout(this.generateCar.bind(this), prob);
-      }
-    }
-  }, {
-    key: 'generateCar',
-    value: function generateCar() {
-      var car = new _car2.default(this.carCtx);
-      this.cars.push(car);
-    }
-  }, {
-    key: 'renderBackground',
-    value: function renderBackground() {
-      this.bgCtx.fillStyle = 'green';
-      this.bgCtx.fillRect(0, 0, this.backgroundDividers, this.background.height);
-      this.bgCtx.fillRect(this.backgroundDividers * 3, 0, this.backgroundDividers, this.background.height);
-      this.bgCtx.fillStyle = 'gray';
-      this.bgCtx.fillRect(this.backgroundDividers, 0, this.backgroundDividers, this.background.height);
-      this.bgCtx.fillRect(this.backgroundDividers * 2, 0, this.backgroundDividers, this.background.height);
-      this.bgCtx.beginPath();
-      this.bgCtx.setLineDash([20, 60]);
-      this.bgCtx.strokeStyle = "yellow";
-      this.bgCtx.moveTo(this.backgroundDividers * 1.5, 0);
-      this.bgCtx.lineTo(this.backgroundDividers * 1.5, 700);
-      this.bgCtx.stroke();
-      this.bgCtx.moveTo(this.backgroundDividers * 2, 0);
-      this.bgCtx.lineTo(this.backgroundDividers * 2, 700);
-      this.bgCtx.stroke();
-      this.bgCtx.moveTo(this.backgroundDividers * 2.5, 0);
-      this.bgCtx.lineTo(this.backgroundDividers * 2.5, 700);
-      this.bgCtx.stroke();
-    }
-  }]);
-
-  return Game;
-}();
-
-exports.default = Game;
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -282,14 +95,26 @@ var Car = function () {
     this.sy = 25;
     this.sWidth = 100;
     this.sHeight = 217;
-    var rand_xPos = [300, 450, 600, 750];
-    this.xPos = rand_xPos[Math.floor(Math.random() * 4)];
+    this.xPos = 0;
     this.yPos = 0;
     this.dWidth = 50;
     this.dHeight = 100;
   }
 
   _createClass(Car, [{
+    key: "getXPos",
+    value: function getXPos() {
+      if (this.xPos) {
+        return this.xPos;
+      }
+      var temp = Math.floor(Math.random() * 1000);
+      if (temp > 300 && temp < 700) {
+        this.xPos = temp;
+      } else {
+        this.getXPos();
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       // this.image.onload = () => {
@@ -305,14 +130,14 @@ var Car = function () {
       }
       this.xPos += dx;
       this.yPos += dy;
-      this.render();
     }
   }, {
     key: "checkValidMove",
     value: function checkValidMove(dx, dy) {
-      if (this.xPos + dx <= 225 || this.xPos + dx > 750) {
+      this.getXPos();
+      if (this.xPos + dx <= 270 || this.xPos + dx > 788) {
         return false;
-      } else if (this.yPos + dy > 600 || this.yPos + dy < 0) {
+      } else if (this.yPos + dy > 960 || this.yPos + dy < 0) {
         return false;
       } else {
         return true;
@@ -320,7 +145,14 @@ var Car = function () {
     }
   }, {
     key: "randomMove",
-    value: function randomMove() {}
+    value: function randomMove() {
+      var dy = Math.random() * 15;
+      if (this.checkValidMove(0, dy)) {
+        this.move(0, dy);
+      } else {
+        this.randomMove();
+      }
+    }
   }]);
 
   return Car;
@@ -329,8 +161,71 @@ var Car = function () {
 exports.default = Car;
 
 /***/ }),
-/* 3 */,
-/* 4 */
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _game = __webpack_require__(2);
+
+var _game2 = _interopRequireDefault(_game);
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+var _game_view = __webpack_require__(4);
+
+var _game_view2 = _interopRequireDefault(_game_view);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  console.log("DOM fully loaded and parsed");
+
+  // background
+  var background = document.getElementById("canvas-background");
+  var bgCtx = background.getContext("2d");
+  background.borders = background.width / 4;
+  window.bgCtx = bgCtx;
+
+  // cars
+  var cars = document.getElementById("canvas-car");
+  var carCtx = background.getContext("2d");
+  window.carCtx = carCtx;
+  var game = new _game2.default(bgCtx, background, carCtx);
+  var player = game.player; // need this after instance of game is made
+  game.start();
+
+  // player
+
+
+  document.addEventListener("keydown", function (e) {
+    e.preventDefault();
+    switch (e.key) {
+      case "ArrowLeft":
+        // game.render();
+        player.move(-20, 0);
+        break;
+      case "ArrowRight":
+        // game.render();
+        player.move(20, 0);
+        break;
+      case "ArrowUp":
+        // game.render();
+        player.move(0, -20);
+        break;
+      case "ArrowDown":
+        // game.render();
+        player.move(0, 20);
+        break;
+    }
+  });
+});
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -340,7 +235,172 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _car = __webpack_require__(2);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+var _player = __webpack_require__(3);
+
+var _player2 = _interopRequireDefault(_player);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Game = function () {
+  function Game(bgCtx, background, carCtx) {
+    _classCallCheck(this, Game);
+
+    // create background
+    this.background = background;
+    this.bgCtx = bgCtx;
+    this.carCtx = carCtx;
+    this.backgroundDividers = background.width / 4;
+    this.yPosLineStart;
+
+    this.cars = [];
+    // create player
+    var player = new _player2.default(this.carCtx);
+    this.player = player;
+  }
+  // start game
+
+
+  _createClass(Game, [{
+    key: 'start',
+    value: function start() {
+      this.generateCar();
+      this.yPosLineStart = 0;
+      var intervalLine = setInterval(this.ossiliateLines.bind(this), 500);
+
+      // debugger;
+      // let intervalSlowDown = setInterval(this.player.slowDown.bind(this), 500);
+      // one car is *potentially* made every second
+      var intervalCar = setInterval(this.initializeCarGenerator.bind(this), 400);
+      this.renderCars();
+      requestAnimationFrame(this.animate.bind(this));
+    }
+
+    // redraws at 60FPS
+
+  }, {
+    key: 'animate',
+    value: function animate(time) {
+      this.renderBackground();
+      this.destroyCars();
+      this.renderCars();
+      this.player.render();
+
+      requestAnimationFrame(this.animate.bind(this));
+    }
+
+    // CARS
+    // redraws all cars on the screen
+
+  }, {
+    key: 'renderCars',
+    value: function renderCars() {
+      this.cars.forEach(function (car) {
+        car.randomMove();
+        car.render();
+      });
+    }
+    // destroy car if they reached the of the canvas
+
+  }, {
+    key: 'destroyCars',
+    value: function destroyCars() {
+      var dup = [];
+      for (var i = 0; i < this.cars.length; i++) {
+        if (this.cars[i].yPos < 950) {
+          dup.push(this.cars[i]);
+        }
+      }
+      this.cars = dup;
+      return this.cars;
+    }
+
+    //cars are generated at random
+
+  }, {
+    key: 'initializeCarGenerator',
+    value: function initializeCarGenerator() {
+      var prob = Math.floor(Math.random() * 5000);
+      if (prob < 300 || prob > 4000) {
+        return this.initializeCarGenerator();
+      } else {
+        var IntervalId = setTimeout(this.generateCar.bind(this), 100);
+      }
+    }
+  }, {
+    key: 'generateCar',
+    value: function generateCar() {
+      var car = new _car2.default(this.carCtx);
+      this.cars.push(car);
+    }
+
+    // BACKGROUND
+
+  }, {
+    key: 'renderBackground',
+    value: function renderBackground() {
+      this.bgCtx.fillStyle = 'green';
+      this.bgCtx.fillRect(0, 0, this.backgroundDividers, this.background.height);
+      this.bgCtx.fillRect(this.backgroundDividers * 3, 0, this.backgroundDividers, this.background.height);
+      this.bgCtx.fillStyle = 'gray';
+      this.bgCtx.fillRect(this.backgroundDividers, 0, this.backgroundDividers, this.background.height);
+      this.bgCtx.fillRect(this.backgroundDividers * 2, 0, this.backgroundDividers, this.background.height);
+
+      this.renderLines();
+    }
+  }, {
+    key: 'ossiliateLines',
+    value: function ossiliateLines() {
+      this.yPosLineStart === 0 ? this.yPosLineStart = 100 : this.yPosLineStart = 0;
+    }
+  }, {
+    key: 'renderLines',
+    value: function renderLines() {
+      // first set of dashes
+      this.bgCtx.beginPath();
+      this.bgCtx.setLineDash([20, 60]);
+      this.bgCtx.strokeStyle = "yellow";
+      this.bgCtx.moveTo(this.backgroundDividers * 1.5, this.yPosLineStart);
+      this.bgCtx.lineTo(this.backgroundDividers * 1.5, this.yPosLineStart + 1100);
+
+      // second set of dashes
+      this.bgCtx.stroke();
+      this.bgCtx.moveTo(this.backgroundDividers * 2, this.yPosLineStart);
+      this.bgCtx.lineTo(this.backgroundDividers * 2, this.yPosLineStart + 1100);
+
+      // third set of dashes
+      this.bgCtx.stroke();
+      this.bgCtx.moveTo(this.backgroundDividers * 2.5, this.yPosLineStart);
+      this.bgCtx.lineTo(this.backgroundDividers * 2.5, this.yPosLineStart + 1100);
+
+      this.bgCtx.stroke();
+    }
+  }]);
+
+  return Game;
+}();
+
+exports.default = Game;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(0);
 
 var _car2 = _interopRequireDefault(_car);
 
@@ -370,7 +430,7 @@ var Player = function (_Car) {
     _this.sWidth = 100;
     _this.sHeight = 217;
     _this.xPos = 450;
-    _this.yPos = 500;
+    _this.yPos = 700;
     _this.dWidth = 50;
     _this.dHeight = 100;
     image.onload = function () {
@@ -379,13 +439,20 @@ var Player = function (_Car) {
     return _this;
   }
 
+  // slowDown() {
+  //
+  //   this.player.yPos = this.player.yPos + 10;
+  //
+  // }
+
+
   return Player;
 }(_car2.default);
 
 exports.default = Player;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

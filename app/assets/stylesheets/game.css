@@ -9,7 +9,7 @@
 #canvas-background {
   display: flex;
   border: 3px solid red;
-  height: 54vh;
+  height: 98.5vh;
   width: 96vh;
   background-color: grey;
   z-index: 0;
@@ -17,5 +17,4 @@
 
 #canvas-car {
   z-index: 1;
-
 }

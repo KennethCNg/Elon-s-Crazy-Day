@@ -27,19 +27,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
     switch (e.key) {
       case "ArrowLeft":
         // game.render();
-        player.move(-75, 0);
+        player.move(-20, 0);
         break;
       case "ArrowRight":
         // game.render();
-        player.move(75, 0);
+        player.move(20, 0);
         break;
       case "ArrowUp":
         // game.render();
-        player.move(0, -50);
+        player.move(0, -20);
         break;
       case "ArrowDown":
         // game.render();
-        player.move(0, 50);
+        player.move(0, 20);
         break;
     }
   });
