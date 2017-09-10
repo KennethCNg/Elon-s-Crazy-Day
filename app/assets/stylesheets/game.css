@@ -1,6 +1,7 @@
 #outer-wrapper {
   display: flex;
   justify-content: center;
+  height: 100vh;
 }
 
 #left {
@@ -9,7 +10,7 @@
   align-items: center;
   padding: 2px;
   background-color: black;
-  width: 50vh;
+  width: 20%;
   color: white;
   border: white;
 }
@@ -27,7 +28,6 @@
 #controls {
   display: flex;
   align-self: center;
-  /*height: 20%;*/
   text-decoration: underline;
 }
 
@@ -50,12 +50,20 @@ li{
   margin-bottom: 10px;
 }
 
+#canvas-wrapper {
+  display: flex;
+  background-color: black;
+  width: 60%;
+}
+
 #canvas-background {
   display: flex;
+  justify-content: center;
+  align-items: center;
   border: 3px solid red;
   height: 98.5vh;
-  width: 96vh;
-  background-color: grey;
+  width: 100%;
+  background-color: black;
   z-index: 0;
 }
 
@@ -70,7 +78,7 @@ li{
   align-items: center;
   padding: 2px;
   background-color: black;
-  width: 50vh;
+  width: 20%;
   color: white;
 }
 
@@ -101,6 +109,7 @@ li{
   display: flex;
   justify-content: space-between;
   color: white;
+  padding-right: 20px;
 }
 
 .fa-github {
@@ -108,5 +117,9 @@ li{
 }
 
 .fa-linkedin {
+  color: white;
+}
+
+.fa-envelope-o {
   color: white;
 }

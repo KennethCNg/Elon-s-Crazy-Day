@@ -267,13 +267,12 @@ var Game = function () {
     this.backgroundDividers = background.width / 4;
     this.yPosLineStart;
 
+    this.score = 0;
     this.cars = [];
     // create player
     var player = new _player2.default(this.carCtx);
     this.player = player;
   }
-  // start game
-
 
   _createClass(Game, [{
     key: 'start',
@@ -285,7 +284,7 @@ var Game = function () {
       // let intervalSlowDown = setInterval(this.player.slowDown.bind(this), 500);
       // one car is *potentially* made every second
       var intervalCar = setInterval(this.initializeCarGenerator.bind(this), 400);
-      // this.renderCars();
+
       requestAnimationFrame(this.animate.bind(this));
     }
 
@@ -294,6 +293,7 @@ var Game = function () {
   }, {
     key: 'animate',
     value: function animate(time) {
+      this.score += 1;
       this.didCollide();
       this.renderBackground();
       this.destroyCars();
@@ -301,7 +301,6 @@ var Game = function () {
       this.renderCars();
 
       requestAnimationFrame(this.animate.bind(this));
-      // debugger;
     }
 
     // CARS
@@ -362,6 +361,8 @@ var Game = function () {
       this.bgCtx.fillRect(this.backgroundDividers, 0, this.backgroundDividers, this.background.height);
       this.bgCtx.fillRect(this.backgroundDividers * 2, 0, this.backgroundDividers, this.background.height);
 
+      this.drawScore();
+
       this.renderLines();
     }
   }, {
@@ -392,6 +393,8 @@ var Game = function () {
       this.bgCtx.stroke();
     }
 
+    // Game Logic
+
     // not sure why collision isn't occuring as expected
     // 1) when player is flush against the top of the canvas, crashing is not detected
 
@@ -403,17 +406,23 @@ var Game = function () {
       this.cars.forEach(function (car) {
         // player collides with back right bumper of car
         if (_this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > _this.player.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
-          // debugger;
           // alert("crash!");
           // return true;
 
           // player collies with
         } else if (car.xPos > _this.player.xPos && _this.player.xPos + _this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
-          // debugger;
           // alert("crash!");
           // return true;
         }
       });
+    }
+  }, {
+    key: 'drawScore',
+    value: function drawScore() {
+      this.bgCtx.font = "25px Arial";
+      this.bgCtx.fillStyle = "white";
+      debugger;
+      this.bgCtx.fillText("Score: " + this.score, 8, 20);
     }
   }]);
 
