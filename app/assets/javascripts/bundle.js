@@ -81,24 +81,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Car = function () {
   function Car(carCtx) {
     _classCallCheck(this, Car);
-
-    this.carCtx = carCtx;
-    var rand_cars = ["./app/assets/images/Ambulance.png", "./app/assets/images/Mini_truck.png", "./app/assets/images/Mini_van.png", "./app/assets/images/taxi.png", "./app/assets/images/Police.png"];
-
-    var car = rand_cars[Math.floor(Math.random() * 5)];
-    var image = new Image();
-    image.src = car;
-    this.image = image;
-    this.height = 100;
-    this.width = 100;
-    this.sx = 78;
-    this.sy = 25;
-    this.sWidth = 100;
-    this.sHeight = 217;
-    this.xPos = 0;
-    this.yPos = 0;
-    this.dWidth = 50;
-    this.dHeight = 100;
   }
 
   _createClass(Car, [{
@@ -118,6 +100,8 @@ var Car = function () {
     key: "render",
     value: function render() {
       // this.image.onload = () => {
+      // this.carCtx.fillStyle = "black";
+      // this.carCtx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
       this.carCtx.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.xPos, this.yPos, this.dWidth, this.dHeight);
       // };
     }
@@ -137,7 +121,7 @@ var Car = function () {
       this.getXPos();
       if (this.xPos + dx <= 270 || this.xPos + dx > 788) {
         return false;
-      } else if (this.yPos + dy > 960 || this.yPos + dy < 0) {
+      } else if (this.yPos + dy > 960 || this.yPos + dy < 10) {
         return false;
       } else {
         return true;
@@ -175,7 +159,7 @@ var _car = __webpack_require__(0);
 
 var _car2 = _interopRequireDefault(_car);
 
-var _game_view = __webpack_require__(4);
+var _game_view = __webpack_require__(10);
 
 var _game_view2 = _interopRequireDefault(_game_view);
 
@@ -245,6 +229,30 @@ var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
+var _ambulance = __webpack_require__(4);
+
+var _ambulance2 = _interopRequireDefault(_ambulance);
+
+var _mini_truck = __webpack_require__(5);
+
+var _mini_truck2 = _interopRequireDefault(_mini_truck);
+
+var _mini_van = __webpack_require__(6);
+
+var _mini_van2 = _interopRequireDefault(_mini_van);
+
+var _police = __webpack_require__(7);
+
+var _police2 = _interopRequireDefault(_police);
+
+var _taxi = __webpack_require__(8);
+
+var _taxi2 = _interopRequireDefault(_taxi);
+
+var _truck = __webpack_require__(9);
+
+var _truck2 = _interopRequireDefault(_truck);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -271,15 +279,14 @@ var Game = function () {
   _createClass(Game, [{
     key: 'start',
     value: function start() {
-      this.generateCar();
       this.yPosLineStart = 0;
-      var intervalLine = setInterval(this.ossiliateLines.bind(this), 500);
+      var intervalLine = setInterval(this.ossiliateLines.bind(this), 80);
 
-      // debugger;
+      this.generateCar();
       // let intervalSlowDown = setInterval(this.player.slowDown.bind(this), 500);
       // one car is *potentially* made every second
       var intervalCar = setInterval(this.initializeCarGenerator.bind(this), 400);
-      this.renderCars();
+      // this.renderCars();
       requestAnimationFrame(this.animate.bind(this));
     }
 
@@ -288,12 +295,14 @@ var Game = function () {
   }, {
     key: 'animate',
     value: function animate(time) {
+      this.didCollide();
       this.renderBackground();
       this.destroyCars();
-      this.renderCars();
       this.player.render();
+      this.renderCars();
 
       requestAnimationFrame(this.animate.bind(this));
+      // debugger;
     }
 
     // CARS
@@ -337,7 +346,8 @@ var Game = function () {
   }, {
     key: 'generateCar',
     value: function generateCar() {
-      var car = new _car2.default(this.carCtx);
+      var rand_cars = [new _ambulance2.default(this.carCtx), new _mini_truck2.default(this.carCtx), new _mini_van2.default(this.carCtx), new _police2.default(this.carCtx), new _taxi2.default(this.carCtx), new _truck2.default(this.carCtx)];
+      var car = rand_cars[Math.floor(Math.random() * 6)];
       this.cars.push(car);
     }
 
@@ -382,6 +392,30 @@ var Game = function () {
 
       this.bgCtx.stroke();
     }
+
+    // not sure why collision isn't occuring as expected
+    // 1) when player is flush against the top of the canvas, crashing is not detected
+
+  }, {
+    key: 'didCollide',
+    value: function didCollide() {
+      var _this = this;
+
+      this.cars.forEach(function (car) {
+        // player collides with back right bumper of car
+        if (_this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > _this.player.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
+          // debugger;
+          alert("crash!");
+          // return true;
+
+          // player collies with
+        } else if (car.xPos > _this.player.xPos && _this.player.xPos + _this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
+          // debugger;
+          alert("crash!");
+          // return true;
+        }
+      });
+    }
   }]);
 
   return Game;
@@ -423,6 +457,7 @@ var Player = function (_Car) {
     var image = new Image();
     image.src = "./app/assets/images/Tesla.png";
     _this.image = image;
+    _this.carCtx = carCtx;
     _this.height = 100;
     _this.width = 100;
     _this.sx = 78;
@@ -440,9 +475,7 @@ var Player = function (_Car) {
   }
 
   // slowDown() {
-  //
   //   this.player.yPos = this.player.yPos + 10;
-  //
   // }
 
 
@@ -453,6 +486,342 @@ exports.default = Player;
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Ambulance = function (_Car) {
+  _inherits(Ambulance, _Car);
+
+  function Ambulance(carCtx) {
+    _classCallCheck(this, Ambulance);
+
+    var _this = _possibleConstructorReturn(this, (Ambulance.__proto__ || Object.getPrototypeOf(Ambulance)).call(this, carCtx));
+
+    var image = new Image();
+    image.src = "./app/assets/images/Ambulance.png";
+    _this.image = image;
+    _this.carCtx = carCtx;
+    _this.height = 100;
+    _this.width = 100;
+    _this.sx = 82;
+    _this.sy = 28;
+    _this.sWidth = 85;
+    _this.sHeight = 213;
+    _this.xPos = 0;
+    _this.yPos = 10;
+    _this.dWidth = 50;
+    _this.dHeight = 100;
+    image.onload = function () {
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+    };
+    return _this;
+  }
+
+  return Ambulance;
+}(_car2.default);
+
+exports.default = Ambulance;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MiniTruck = function (_Car) {
+  _inherits(MiniTruck, _Car);
+
+  function MiniTruck(carCtx) {
+    _classCallCheck(this, MiniTruck);
+
+    var _this = _possibleConstructorReturn(this, (MiniTruck.__proto__ || Object.getPrototypeOf(MiniTruck)).call(this, carCtx));
+
+    var image = new Image();
+    image.src = "./app/assets/images/Mini_truck.png";
+    _this.image = image;
+    _this.carCtx = carCtx;
+    _this.height = 100;
+    _this.width = 100;
+    _this.sx = 70;
+    _this.sy = 25;
+    _this.sWidth = 100;
+    _this.sHeight = 220;
+    _this.xPos = 0;
+    _this.yPos = 10;
+    _this.dWidth = 50;
+    _this.dHeight = 100;
+    image.onload = function () {
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+    };
+    return _this;
+  }
+
+  return MiniTruck;
+}(_car2.default);
+
+exports.default = MiniTruck;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MiniVan = function (_Car) {
+  _inherits(MiniVan, _Car);
+
+  function MiniVan(carCtx) {
+    _classCallCheck(this, MiniVan);
+
+    var _this = _possibleConstructorReturn(this, (MiniVan.__proto__ || Object.getPrototypeOf(MiniVan)).call(this, carCtx));
+
+    var image = new Image();
+    image.src = "./app/assets/images/Mini_van.png";
+    _this.image = image;
+    _this.carCtx = carCtx;
+    _this.height = 100;
+    _this.width = 100;
+    _this.sx = 78;
+    _this.sy = 25;
+    _this.sWidth = 85;
+    _this.sHeight = 200;
+    _this.xPos = 0;
+    _this.yPos = 10;
+    _this.dWidth = 50;
+    _this.dHeight = 100;
+    image.onload = function () {
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+    };
+    return _this;
+  }
+
+  return MiniVan;
+}(_car2.default);
+
+exports.default = MiniVan;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Police = function (_Car) {
+  _inherits(Police, _Car);
+
+  function Police(carCtx) {
+    _classCallCheck(this, Police);
+
+    var _this = _possibleConstructorReturn(this, (Police.__proto__ || Object.getPrototypeOf(Police)).call(this, carCtx));
+
+    var image = new Image();
+    image.src = "./app/assets/images/Police.png";
+    _this.image = image;
+    _this.carCtx = carCtx;
+    _this.height = 100;
+    _this.width = 100;
+    _this.sx = 78;
+    _this.sy = 25;
+    _this.sWidth = 100;
+    _this.sHeight = 217;
+    _this.xPos = 0;
+    _this.yPos = 10;
+    _this.dWidth = 50;
+    _this.dHeight = 100;
+    image.onload = function () {
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+    };
+    return _this;
+  }
+
+  return Police;
+}(_car2.default);
+
+exports.default = Police;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Taxi = function (_Car) {
+  _inherits(Taxi, _Car);
+
+  function Taxi(carCtx) {
+    _classCallCheck(this, Taxi);
+
+    var _this = _possibleConstructorReturn(this, (Taxi.__proto__ || Object.getPrototypeOf(Taxi)).call(this, carCtx));
+
+    var image = new Image();
+    image.src = "./app/assets/images/Taxi.png";
+    _this.image = image;
+    _this.carCtx = carCtx;
+    _this.height = 100;
+    _this.width = 100;
+    _this.sx = 73;
+    _this.sy = 10;
+    _this.sWidth = 102;
+    _this.sHeight = 232;
+    _this.xPos = 0;
+    _this.yPos = 10;
+    _this.dWidth = 50;
+    _this.dHeight = 100;
+    image.onload = function () {
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+    };
+    return _this;
+  }
+
+  return Taxi;
+}(_car2.default);
+
+exports.default = Taxi;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _car = __webpack_require__(0);
+
+var _car2 = _interopRequireDefault(_car);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Truck = function (_Car) {
+  _inherits(Truck, _Car);
+
+  function Truck(carCtx) {
+    _classCallCheck(this, Truck);
+
+    var _this = _possibleConstructorReturn(this, (Truck.__proto__ || Object.getPrototypeOf(Truck)).call(this, carCtx));
+
+    var image = new Image();
+    image.src = "./app/assets/images/Truck.png";
+    _this.image = image;
+    _this.carCtx = carCtx;
+    _this.height = 100;
+    _this.width = 100;
+    _this.sx = 245;
+    _this.sy = 50;
+    _this.sWidth = 173;
+    _this.sHeight = 625;
+    _this.xPos = 0;
+    _this.yPos = 10;
+    _this.dWidth = 50;
+    _this.dHeight = 200;
+    image.onload = function () {
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+    };
+    return _this;
+  }
+
+  return Truck;
+}(_car2.default);
+
+exports.default = Truck;
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
