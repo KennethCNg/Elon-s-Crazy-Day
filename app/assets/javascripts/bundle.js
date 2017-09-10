@@ -119,7 +119,7 @@ var Car = function () {
     key: "checkValidMove",
     value: function checkValidMove(dx, dy) {
       this.getXPos();
-      if (this.xPos + dx <= 270 || this.xPos + dx > 788) {
+      if (this.xPos + dx <= 270 || this.xPos + dx > 765) {
         return false;
       } else if (this.yPos + dy > 960 || this.yPos + dy < 10) {
         return false;
@@ -178,12 +178,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var cars = document.getElementById("canvas-car");
   var carCtx = background.getContext("2d");
   window.carCtx = carCtx;
+
   var game = new _game2.default(bgCtx, background, carCtx);
-  var player = game.player; // need this after instance of game is made
-  game.start();
 
-  // player
-
+  // need this after instance of game is made
+  // game.start();
+  var player = game.player;
 
   document.addEventListener("keydown", function (e) {
     e.preventDefault();
@@ -203,6 +203,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
       case "ArrowDown":
         // game.render();
         player.move(0, 20);
+        break;
+      case "S":
+      case "s":
+        game.start();
+        break;
+      case "N":
+      case "n":
+        // new game
+        debugger;
+        game.stop();
+        debugger;
         break;
     }
   });
@@ -260,23 +271,28 @@ var Game = function () {
   function Game(bgCtx, background, carCtx) {
     _classCallCheck(this, Game);
 
-    // create background
+    // Game Logic
+    this.score = 0;
+    this.cars = [];
+
+    // Background
     this.background = background;
     this.bgCtx = bgCtx;
     this.carCtx = carCtx;
     this.backgroundDividers = background.width / 4;
     this.yPosLineStart;
+    this.renderBackground();
 
-    this.score = 0;
-    this.cars = [];
-    // create player
+    // Player
     var player = new _player2.default(this.carCtx);
     this.player = player;
+    this.game;
   }
 
   _createClass(Game, [{
     key: 'start',
     value: function start() {
+
       this.yPosLineStart = 0;
       var intervalLine = setInterval(this.ossiliateLines.bind(this), 80);
 
@@ -287,9 +303,6 @@ var Game = function () {
 
       requestAnimationFrame(this.animate.bind(this));
     }
-
-    // redraws at 60FPS
-
   }, {
     key: 'animate',
     value: function animate(time) {
@@ -300,7 +313,14 @@ var Game = function () {
       this.player.render();
       this.renderCars();
 
-      requestAnimationFrame(this.animate.bind(this));
+      this.game = requestAnimationFrame(this.animate.bind(this));
+    }
+  }, {
+    key: 'stop',
+    value: function stop() {
+      this.score = 0;
+      this.cars = [];
+      cancelAnimationFrame(this.game);
     }
 
     // CARS
@@ -421,7 +441,6 @@ var Game = function () {
     value: function drawScore() {
       this.bgCtx.font = "25px Arial";
       this.bgCtx.fillStyle = "white";
-      debugger;
       this.bgCtx.fillText("Score: " + this.score, 8, 20);
     }
   }]);
@@ -472,8 +491,8 @@ var Player = function (_Car) {
     _this.sy = 25;
     _this.sWidth = 100;
     _this.sHeight = 217;
-    _this.xPos = 450;
-    _this.yPos = 700;
+    _this.xPos = 525;
+    _this.yPos = 800;
     _this.dWidth = 50;
     _this.dHeight = 100;
     image.onload = function () {

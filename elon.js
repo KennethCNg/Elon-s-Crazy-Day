@@ -15,11 +15,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var cars = document.getElementById("canvas-car");
   var carCtx = background.getContext("2d");
   window.carCtx = carCtx;
-  const game = new Game(bgCtx, background, carCtx);
-  const player = game.player; // need this after instance of game is made
-  game.start();
 
-  // player
+
+
+  const game = new Game(bgCtx, background, carCtx);
+
+  // need this after instance of game is made
+  // game.start();
+  const player = game.player;
+
 
 
   document.addEventListener("keydown",function(e) {
@@ -41,6 +45,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // game.render();
         player.move(0, 20);
         break;
+      case "S":
+      case "s":
+        game.start();
+        break;
+      case "N":
+      case "n":
+      // new game
+      debugger;
+        game.stop();
+      debugger;
+      break;
     }
   });
 });
