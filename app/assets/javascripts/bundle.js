@@ -249,13 +249,12 @@ var _taxi = __webpack_require__(8);
 
 var _taxi2 = _interopRequireDefault(_taxi);
 
-var _truck = __webpack_require__(9);
-
-var _truck2 = _interopRequireDefault(_truck);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// import Truck from './truck';
+
 
 var Game = function () {
   function Game(bgCtx, background, carCtx) {
@@ -346,8 +345,8 @@ var Game = function () {
   }, {
     key: 'generateCar',
     value: function generateCar() {
-      var rand_cars = [new _ambulance2.default(this.carCtx), new _mini_truck2.default(this.carCtx), new _mini_van2.default(this.carCtx), new _police2.default(this.carCtx), new _taxi2.default(this.carCtx), new _truck2.default(this.carCtx)];
-      var car = rand_cars[Math.floor(Math.random() * 6)];
+      var rand_cars = [new _ambulance2.default(this.carCtx), new _mini_truck2.default(this.carCtx), new _mini_van2.default(this.carCtx), new _police2.default(this.carCtx), new _taxi2.default(this.carCtx)];
+      var car = rand_cars[Math.floor(Math.random() * 5)];
       this.cars.push(car);
     }
 
@@ -405,13 +404,13 @@ var Game = function () {
         // player collides with back right bumper of car
         if (_this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > _this.player.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
           // debugger;
-          alert("crash!");
+          // alert("crash!");
           // return true;
 
           // player collies with
         } else if (car.xPos > _this.player.xPos && _this.player.xPos + _this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
           // debugger;
-          alert("crash!");
+          // alert("crash!");
           // return true;
         }
       });
@@ -765,62 +764,7 @@ var Taxi = function (_Car) {
 exports.default = Taxi;
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _car = __webpack_require__(0);
-
-var _car2 = _interopRequireDefault(_car);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Truck = function (_Car) {
-  _inherits(Truck, _Car);
-
-  function Truck(carCtx) {
-    _classCallCheck(this, Truck);
-
-    var _this = _possibleConstructorReturn(this, (Truck.__proto__ || Object.getPrototypeOf(Truck)).call(this, carCtx));
-
-    var image = new Image();
-    image.src = "./app/assets/images/Truck.png";
-    _this.image = image;
-    _this.carCtx = carCtx;
-    _this.height = 100;
-    _this.width = 100;
-    _this.sx = 245;
-    _this.sy = 50;
-    _this.sWidth = 173;
-    _this.sHeight = 625;
-    _this.xPos = 0;
-    _this.yPos = 10;
-    _this.dWidth = 50;
-    _this.dHeight = 200;
-    image.onload = function () {
-      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
-    };
-    return _this;
-  }
-
-  return Truck;
-}(_car2.default);
-
-exports.default = Truck;
-
-/***/ }),
+/* 9 */,
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 

@@ -1,9 +1,53 @@
-#canvas-wrapper {
+#outer-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+#left {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2px;
   background-color: black;
+  width: 50vh;
+  color: white;
+  border: white;
+}
+
+#instructions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: medium dashed white;
+  padding: 20px;
+  width: 70%;
+  height: 30%;
+}
+
+#controls {
+  display: flex;
+  align-self: center;
+  /*height: 20%;*/
+  text-decoration: underline;
+}
+
+#control-list {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 80%;
+  align-items: center;
+}
+ul{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+li{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 #canvas-background {
@@ -17,4 +61,52 @@
 
 #canvas-car {
   z-index: 1;
+}
+
+
+#right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  background-color: black;
+  width: 50vh;
+  color: white;
+}
+
+#About-Me {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: medium dashed white;
+  padding: 20px;
+  width: 70%;
+  height: 50%;
+}
+
+#hi {
+  display: flex;
+  align-self: center;
+  text-decoration: underline;
+}
+
+#paragraph {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+}
+
+#icons {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.fa-github {
+  color: white;
+}
+
+.fa-linkedin {
+  color: white;
 }

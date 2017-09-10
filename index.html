@@ -6,13 +6,51 @@
     <title>Save Elon's model-X!</title>
     <link rel=stylesheet href="./app/assets/stylesheets/reset.css">
     <link rel=stylesheet href="./app/assets/stylesheets/game.css">
+    <link rel=stylesheet href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
+    <div id="outer-wrapper">
 
-    <div id="canvas-wrapper">
-      <canvas id="canvas-background" width="1100" height="1100"/>
-      <canvas id="canvas-car"/>
+      <div id="left">
+        <div id="instructions">
+          <div id="controls">
+            Controls
+          </div>
+          <div id="control-list">
+            <ul>
+              <li><div>Up:</div> <div><i class="fa fa-arrow-up" aria-hidden="true"></i></div></li>
+              <li><div>Down:</div> <div><i class="fa fa-arrow-down" aria-hidden="true"></i></div></li>
+              <li><div>Left:</div> <div><i class="fa fa-arrow-left" aria-hidden="true"></i></div></li>
+              <li><div>Right:</div> <div><i class="fa fa-arrow-right" aria-hidden="true"></i></div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="canvas-wrapper">
+        <canvas id="canvas-background" width="1100" height="1100"/>
+        <canvas id="canvas-car"/>
+      </div>
+      <div id="right">
+        <div id="About-Me">
+          <div id="hi">
+            Elon's Crazy Day
+          </div>
+          <div id="paragraph">
+            Elon Musk has a board meeting to attend but man does Palo Alto have some rough traffic.
+            His Tesla Roadster's fancy auto-pilot isn't working so you'll need to drive him.
+            Use the arrow keys to navigate through Highway 888.
+          </div>
+          <div id="icons">
+            Kenneth Ng:
+            <a target="_blank" href="https://github.com/Lookatamonkey"><i class="fa fa-github"></i></a>
+            <a target="_blank" href="https://www.linkedin.com/in/kenneth-ng-42813496/"><i class="fa fa-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
     <script type="text/javascript" src='./app/assets/javascripts/bundle.js'></script>
+
 </html>
