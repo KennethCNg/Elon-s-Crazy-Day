@@ -216,13 +216,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         break;
       case "S":
       case "s":
-        game.stopGame(); //need this so continuous presses on S won't create more instances of game
+        game.stopGame(); //need this so continuous presses on S don't work
         game.startGame();
         break;
-      case "N":
-      case "n":
-        game.stopGame();
-        break;
+      // case "N":
+      // case "n":
+      //   game.stopGame();
+      // break;
     }
   });
 });
@@ -322,6 +322,7 @@ var Game = function () {
     _classCallCheck(this, Game);
 
     // Game Logic
+    // this.stop = false;
     this.score = -1;
     this.cars = [];
     this.startCtx = startCtx;
@@ -369,13 +370,16 @@ var Game = function () {
       this.destroyCars();
       this.player.render();
       this.renderCars();
-      this.didCollide();
 
+      // if ( !this.stop ) {
       this.game = requestAnimationFrame(this.animate.bind(this));
+      this.didCollide();
+      // }
     }
   }, {
     key: 'stopGame',
     value: function stopGame() {
+      // this.stop = true;
       this.score = 0;
       this.cars = [];
       cancelAnimationFrame(this.game);
@@ -486,14 +490,14 @@ var Game = function () {
         var car = this.cars[i];
         if (this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > this.player.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
 
-          var game = Object.getPrototypeof(this);
-          game.stopGame();
+          // let game = Object.getPrototypeof(this);
+          this.stopGame();
 
           // player collides with left side of car
         } else if (car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
 
-          var _game = Object.getPrototypeof(this);
-          _game.stopGame();
+          // let game = Object.getPrototypeof(this);
+          this.stopGame();
         }
       }
     }

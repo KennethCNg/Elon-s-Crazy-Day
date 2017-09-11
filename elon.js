@@ -58,13 +58,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
         break;
       case "S":
       case "s":
-        game.stopGame(); //need this so continuous presses on S won't create more instances of game
+        game.stopGame(); //need this so continuous presses on S don't work
         game.startGame();
         break;
-      case "N":
-      case "n":
-        game.stopGame();
-      break;
+      // case "N":
+      // case "n":
+      //   game.stopGame();
+      // break;
     }
   });
 });

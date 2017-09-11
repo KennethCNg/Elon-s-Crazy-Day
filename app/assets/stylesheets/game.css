@@ -126,6 +126,7 @@ li{
   justify-content: space-between;
   color: white;
   padding-right: 20px;
+  z-index: 99;
 }
 
 .fa-github {
