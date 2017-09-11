@@ -322,7 +322,6 @@ var Game = function () {
     _classCallCheck(this, Game);
 
     // Game Logic
-    // this.stop = false;
     this.score = -1;
     this.cars = [];
     this.startCtx = startCtx;
@@ -379,7 +378,6 @@ var Game = function () {
   }, {
     key: 'stopGame',
     value: function stopGame() {
-      // this.stop = true;
       this.score = 0;
       this.cars = [];
       cancelAnimationFrame(this.game);
