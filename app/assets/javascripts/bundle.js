@@ -488,15 +488,12 @@ var Game = function () {
     value: function didCollide() {
       for (var i = 0; i < this.cars.length; i++) {
         var car = this.cars[i];
+        // player collides with right side of car
         if (this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > this.player.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
-
-          // let game = Object.getPrototypeof(this);
           this.stopGame();
 
           // player collides with left side of car
         } else if (car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
-
-          // let game = Object.getPrototypeof(this);
           this.stopGame();
         }
       }
