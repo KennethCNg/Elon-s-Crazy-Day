@@ -1,7 +1,6 @@
 import Start from './lib/start';
 import Game from './lib/game';
 import Car from './lib/car';
-import GameView from './lib/game_view';
 
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
@@ -22,19 +21,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var startCtx = background.getContext("2d");
   window.startCtx = startCtx;
   const startScreen = new Start(startCtx, background, bgCtx);
-  // startCtx.globalCompositeOperation='destination-over';
 
 
   // Font needs to be loaded before called
   window.setTimeout( () => {
-    console.log("hello");
     startCtx.font="22px PS2P";
     startCtx.fillStyle="white";
     startCtx.fillText("Elon's Crazy Day", 370, 225);
-    // startCtx.font = "15px PS2P";
-    // startCtx.fillStyle = "white";
-    // startCtx.fillText("Score: 0", 8, 20);
-  }, 100);
+  }, 275);
 
 
   //
@@ -51,31 +45,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
     e.preventDefault();
     switch (e.key) {
       case "ArrowLeft":
-        // game.render();
         player.move(-20, 0);
         break;
       case "ArrowRight":
-        // game.render();
         player.move(20, 0);
         break;
       case "ArrowUp":
-        // game.render();
         player.move(0, -20);
         break;
       case "ArrowDown":
-        // game.render();
         player.move(0, 20);
         break;
       case "S":
       case "s":
-        // startCtx.globalAlpha = 1;
-        // startCtx.globalCompositeOperation='source-over';
-        game.stop();
-        game.start();
+        game.startGame();
         break;
       case "N":
       case "n":
-        game.stop();
+        game.stopGame();
       break;
     }
   });

@@ -86,7 +86,6 @@ var Car = function () {
   _createClass(Car, [{
     key: "getXPos",
     value: function getXPos() {
-      debugger;
       if (this.xPos) {
         return this.xPos;
       }
@@ -164,10 +163,6 @@ var _car = __webpack_require__(0);
 
 var _car2 = _interopRequireDefault(_car);
 
-var _game_view = __webpack_require__(10);
-
-var _game_view2 = _interopRequireDefault(_game_view);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -189,19 +184,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var startCtx = background.getContext("2d");
   window.startCtx = startCtx;
   var startScreen = new _start2.default(startCtx, background, bgCtx);
-  // startCtx.globalCompositeOperation='destination-over';
-
 
   // Font needs to be loaded before called
   window.setTimeout(function () {
-    console.log("hello");
     startCtx.font = "22px PS2P";
     startCtx.fillStyle = "white";
     startCtx.fillText("Elon's Crazy Day", 370, 225);
-    // startCtx.font = "15px PS2P";
-    // startCtx.fillStyle = "white";
-    // startCtx.fillText("Score: 0", 8, 20);
-  }, 100);
+  }, 275);
 
   //
   var game = new _game2.default(bgCtx, background, carCtx);
@@ -214,31 +203,24 @@ document.addEventListener("DOMContentLoaded", function (event) {
     e.preventDefault();
     switch (e.key) {
       case "ArrowLeft":
-        // game.render();
         player.move(-20, 0);
         break;
       case "ArrowRight":
-        // game.render();
         player.move(20, 0);
         break;
       case "ArrowUp":
-        // game.render();
         player.move(0, -20);
         break;
       case "ArrowDown":
-        // game.render();
         player.move(0, 20);
         break;
       case "S":
       case "s":
-        // startCtx.globalAlpha = 1;
-        // startCtx.globalCompositeOperation='source-over';
-        game.stop();
-        game.start();
+        game.startGame();
         break;
       case "N":
       case "n":
-        game.stop();
+        game.stopGame();
         break;
     }
   });
@@ -339,7 +321,7 @@ var Game = function () {
     _classCallCheck(this, Game);
 
     // Game Logic
-    this.score = 0;
+    this.score = -1;
     this.cars = [];
     this.startCtx = startCtx;
 
@@ -360,14 +342,17 @@ var Game = function () {
     this.game;
     this.intervalLine;
     this.intervalCar;
+    this.intervalScore;
   }
 
   _createClass(Game, [{
-    key: 'start',
-    value: function start() {
+    key: 'startGame',
+    value: function startGame() {
       this.yPosLineStart = 0;
       this.renderLines();
       this.intervalLine = setInterval(this.ossiliateLines.bind(this), 80);
+      this.intervalScore = setInterval(this.drawScore.bind(this), 1000);
+      this.score = 0;
 
       // let intervalSlowDown = setInterval(this.player.slowDown.bind(this), 500);
 
@@ -379,23 +364,23 @@ var Game = function () {
   }, {
     key: 'animate',
     value: function animate(time) {
-      this.score += 1;
-      this.didCollide();
       this.renderBackground();
       this.destroyCars();
       this.player.render();
       this.renderCars();
+      this.didCollide();
 
       this.game = requestAnimationFrame(this.animate.bind(this));
     }
   }, {
-    key: 'stop',
-    value: function stop() {
+    key: 'stopGame',
+    value: function stopGame() {
       this.score = 0;
       this.cars = [];
       cancelAnimationFrame(this.game);
       clearInterval(this.intervalLine);
       clearInterval(this.intervalCar);
+      clearInterval(this.intervalScore);
     }
 
     // CARS
@@ -496,24 +481,26 @@ var Game = function () {
   }, {
     key: 'didCollide',
     value: function didCollide() {
-      var _this = this;
+      for (var i = 0; i < this.cars.length; i++) {
+        var car = this.cars[i];
+        if (this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > this.player.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
 
-      this.cars.forEach(function (car) {
-        // player collides with back right bumper of car
-        if (_this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > _this.player.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
-          // alert("crash!");
-          // return true;
+          var game = Object.getPrototypeof(this);
+          game.stopGame();
 
-          // player collies with
-        } else if (car.xPos > _this.player.xPos && _this.player.xPos + _this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > _this.player.yPos && _this.player.yPos > car.yPos) {
-          // alert("crash!");
-          // return true;
+          // player collides with left side of car
+        } else if (car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
+
+          var _game = Object.getPrototypeof(this);
+          _game.stopGame();
         }
-      });
+      }
     }
   }, {
     key: 'drawScore',
     value: function drawScore() {
+
+      this.score += 1;
       this.bgCtx.font = "15px PS2P";
       this.bgCtx.fillStyle = "white";
       this.bgCtx.fillText("Score: " + this.score, 8, 20);
@@ -865,25 +852,6 @@ var Taxi = function (_Car) {
 }(_car2.default);
 
 exports.default = Taxi;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// class GameView {
-//   constructor(game, ctx) {
-//     this.ctx = ctx;
-//     this.game = game;
-//     this.player = this.game.addPlayer();
-//   }
-//
-//
-//
-// }
-//
-// export default GameView;
-
 
 /***/ })
 /******/ ]);
