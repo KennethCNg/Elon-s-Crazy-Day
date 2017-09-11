@@ -1,6 +1,6 @@
-# Save Elon's model-X!
+# Elon's Crazy Day!
 
-Save Elon's model-X! is an arcade racing game where the player (Elon Musk) drives his fancy Tesla Roadster while dodging other drivers who try and cut him off.
+Elon's Crazy Day! is an arcade racing game where the player (Elon Musk) drives his fancy Tesla Roadster while dodging other drivers who try and cut him off.
 
 ## MVP (Minimum Viable Product)
 
@@ -13,7 +13,7 @@ Include a Space-X rocketship that instantly increases distance travelled.
 
 ## Technologies, Libraries, and APIs
 
-Save Elon's model-X! utilizes JavaScript, jQuery, HTML5 Canvas, Easel.js.
+This game utilizes JavaScript and HTML5 Canvas.
 
 ## Wireframes
 
