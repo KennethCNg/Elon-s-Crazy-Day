@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         break;
       case "S":
       case "s":
+        game.stopGame(); //need this so continuous presses on S won't create more instances of game
         game.startGame();
         break;
       case "N":
