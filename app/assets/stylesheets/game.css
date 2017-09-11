@@ -1,3 +1,13 @@
+/*@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);*/
+/*@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");*/
+/*@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300,700|VT323");*/
+
+@font-face {
+  font-family: "PS2P";
+  src: url('../fonts/start_font/PressStart2P.ttf') format('truetype');
+}
+
+
 #outer-wrapper {
   display: flex;
   justify-content: center;
@@ -13,6 +23,7 @@
   width: 20%;
   color: white;
   border: white;
+  font-family: "PS2P";
 }
 
 #instructions {
@@ -71,6 +82,10 @@ li{
   z-index: 1;
 }
 
+#canvas-start {
+  font-family: "PS2P";
+}
+
 
 #right {
   display: flex;
@@ -80,6 +95,7 @@ li{
   background-color: black;
   width: 20%;
   color: white;
+  font-family: "PS2P";
 }
 
 #About-Me {

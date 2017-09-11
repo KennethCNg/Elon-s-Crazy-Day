@@ -151,7 +151,11 @@ exports.default = Car;
 "use strict";
 
 
-var _game = __webpack_require__(2);
+var _start = __webpack_require__(2);
+
+var _start2 = _interopRequireDefault(_start);
+
+var _game = __webpack_require__(3);
 
 var _game2 = _interopRequireDefault(_game);
 
@@ -179,6 +183,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var carCtx = background.getContext("2d");
   window.carCtx = carCtx;
 
+  // start
+  var start = document.getElementById("canvas-start");
+  var startCtx = background.getContext("2d");
+  window.startCtx = startCtx;
+  var startScreen = new _start2.default(startCtx, background, bgCtx);
+  // startCtx.globalCompositeOperation='destination-over';
+
+
+  // Font needs to be loaded before called
+  window.setTimeout(function () {
+    console.log("hello");
+    startCtx.font = "22px PS2P";
+    startCtx.fillStyle = "white";
+    startCtx.fillText("Elon's Crazy Day", 370, 225);
+  }, 100);
+
+  //
   var game = new _game2.default(bgCtx, background, carCtx);
 
   // need this after instance of game is made
@@ -206,14 +227,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         break;
       case "S":
       case "s":
+        // startCtx.globalAlpha = 1;
+        // startCtx.globalCompositeOperation='source-over';
+        game.stop();
         game.start();
         break;
       case "N":
       case "n":
-        // new game
-        debugger;
         game.stop();
-        debugger;
         break;
     }
   });
@@ -232,31 +253,83 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Start = function () {
+  function Start(startCtx, background, bgCtx) {
+    _classCallCheck(this, Start);
+
+    this.startCtx = startCtx;
+    this.bgCtx = bgCtx;
+    this.background = background;
+    this.backgroundDividers = background.width / 4;
+    this.render();
+  }
+
+  _createClass(Start, [{
+    key: 'render',
+    value: function render() {
+      this.bgCtx.fillStyle = 'green';
+      this.startCtx.fillRect(0, 0, this.backgroundDividers, this.background.height);
+      this.startCtx.fillRect(this.backgroundDividers * 3, 0, this.backgroundDividers, this.background.height);
+      this.startCtx.fillStyle = 'gray';
+      this.startCtx.fillRect(this.backgroundDividers, 225, 550, 550);
+      // this.font();
+    }
+
+    // font() {
+    //   window.setTimeout( () => {
+    //     this.startCtx.font='50px PS2P';
+    //     this.startCtx.fillStyle="white";
+    //     this.startCtx.fillText("Elon's Crazy Day", 390, 225);
+    //   }, 100);
+    // }
+
+  }]);
+
+  return Start;
+}();
+
+exports.default = Start;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _car = __webpack_require__(0);
 
 var _car2 = _interopRequireDefault(_car);
 
-var _player = __webpack_require__(3);
+var _player = __webpack_require__(4);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _ambulance = __webpack_require__(4);
+var _ambulance = __webpack_require__(5);
 
 var _ambulance2 = _interopRequireDefault(_ambulance);
 
-var _mini_truck = __webpack_require__(5);
+var _mini_truck = __webpack_require__(6);
 
 var _mini_truck2 = _interopRequireDefault(_mini_truck);
 
-var _mini_van = __webpack_require__(6);
+var _mini_van = __webpack_require__(7);
 
 var _mini_van2 = _interopRequireDefault(_mini_van);
 
-var _police = __webpack_require__(7);
+var _police = __webpack_require__(8);
 
 var _police2 = _interopRequireDefault(_police);
 
-var _taxi = __webpack_require__(8);
+var _taxi = __webpack_require__(9);
 
 var _taxi2 = _interopRequireDefault(_taxi);
 
@@ -268,12 +341,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var Game = function () {
-  function Game(bgCtx, background, carCtx) {
+  function Game(bgCtx, background, carCtx, startCtx) {
     _classCallCheck(this, Game);
 
     // Game Logic
     this.score = 0;
     this.cars = [];
+    this.startCtx = startCtx;
 
     // Background
     this.background = background;
@@ -281,25 +355,30 @@ var Game = function () {
     this.carCtx = carCtx;
     this.backgroundDividers = background.width / 4;
     this.yPosLineStart;
+    this.renderLines();
     this.renderBackground();
 
     // Player
     var player = new _player2.default(this.carCtx);
     this.player = player;
+
+    // game control variables
     this.game;
+    this.intervalLine;
+    this.intervalCar;
   }
 
   _createClass(Game, [{
     key: 'start',
     value: function start() {
-
       this.yPosLineStart = 0;
-      var intervalLine = setInterval(this.ossiliateLines.bind(this), 80);
+      this.renderLines();
+      this.intervalLine = setInterval(this.ossiliateLines.bind(this), 80);
 
-      this.generateCar();
       // let intervalSlowDown = setInterval(this.player.slowDown.bind(this), 500);
+
       // one car is *potentially* made every second
-      var intervalCar = setInterval(this.initializeCarGenerator.bind(this), 400);
+      this.intervalCar = setInterval(this.initializeCarGenerator.bind(this), 400);
 
       requestAnimationFrame(this.animate.bind(this));
     }
@@ -321,6 +400,8 @@ var Game = function () {
       this.score = 0;
       this.cars = [];
       cancelAnimationFrame(this.game);
+      clearInterval(this.intervalLine);
+      clearInterval(this.intervalCar);
     }
 
     // CARS
@@ -439,7 +520,7 @@ var Game = function () {
   }, {
     key: 'drawScore',
     value: function drawScore() {
-      this.bgCtx.font = "25px Arial";
+      this.bgCtx.font = "15px PS2P";
       this.bgCtx.fillStyle = "white";
       this.bgCtx.fillText("Score: " + this.score, 8, 20);
     }
@@ -451,7 +532,7 @@ var Game = function () {
 exports.default = Game;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -512,7 +593,7 @@ var Player = function (_Car) {
 exports.default = Player;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -568,7 +649,7 @@ var Ambulance = function (_Car) {
 exports.default = Ambulance;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -624,7 +705,7 @@ var MiniTruck = function (_Car) {
 exports.default = MiniTruck;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -680,7 +761,7 @@ var MiniVan = function (_Car) {
 exports.default = MiniVan;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -736,7 +817,7 @@ var Police = function (_Car) {
 exports.default = Police;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -792,7 +873,6 @@ var Taxi = function (_Car) {
 exports.default = Taxi;
 
 /***/ }),
-/* 9 */,
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 

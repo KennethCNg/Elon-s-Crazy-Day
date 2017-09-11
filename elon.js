@@ -1,3 +1,4 @@
+import Start from './lib/start';
 import Game from './lib/game';
 import Car from './lib/car';
 import GameView from './lib/game_view';
@@ -16,13 +17,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var carCtx = background.getContext("2d");
   window.carCtx = carCtx;
 
+  // start
+  var start = document.getElementById("canvas-start");
+  var startCtx = background.getContext("2d");
+  window.startCtx = startCtx;
+  const startScreen = new Start(startCtx, background, bgCtx);
+  // startCtx.globalCompositeOperation='destination-over';
 
 
+  // Font needs to be loaded before called
+  window.setTimeout( () => {
+    console.log("hello");
+    startCtx.font="22px PS2P";
+    startCtx.fillStyle="white";
+    startCtx.fillText("Elon's Crazy Day", 370, 225);
+  }, 100);
+
+
+  //
   const game = new Game(bgCtx, background, carCtx);
 
   // need this after instance of game is made
   // game.start();
   const player = game.player;
+
 
 
 
@@ -47,14 +65,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
         break;
       case "S":
       case "s":
+        // startCtx.globalAlpha = 1;
+        // startCtx.globalCompositeOperation='source-over';
+        game.stop();
         game.start();
         break;
       case "N":
       case "n":
-      // new game
-      debugger;
         game.stop();
-      debugger;
       break;
     }
   });
