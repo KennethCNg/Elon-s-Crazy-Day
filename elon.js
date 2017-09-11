@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     startCtx.font="22px PS2P";
     startCtx.fillStyle="white";
     startCtx.fillText("Elon's Crazy Day", 370, 225);
+    // startCtx.font = "15px PS2P";
+    // startCtx.fillStyle = "white";
+    // startCtx.fillText("Score: 0", 8, 20);
   }, 100);
 
 

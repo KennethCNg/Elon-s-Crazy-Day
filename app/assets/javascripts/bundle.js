@@ -86,6 +86,7 @@ var Car = function () {
   _createClass(Car, [{
     key: "getXPos",
     value: function getXPos() {
+      debugger;
       if (this.xPos) {
         return this.xPos;
       }
@@ -197,6 +198,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     startCtx.font = "22px PS2P";
     startCtx.fillStyle = "white";
     startCtx.fillText("Elon's Crazy Day", 370, 225);
+    // startCtx.font = "15px PS2P";
+    // startCtx.fillStyle = "white";
+    // startCtx.fillText("Score: 0", 8, 20);
   }, 100);
 
   //
@@ -274,17 +278,7 @@ var Start = function () {
       this.startCtx.fillRect(this.backgroundDividers * 3, 0, this.backgroundDividers, this.background.height);
       this.startCtx.fillStyle = 'gray';
       this.startCtx.fillRect(this.backgroundDividers, 225, 550, 550);
-      // this.font();
     }
-
-    // font() {
-    //   window.setTimeout( () => {
-    //     this.startCtx.font='50px PS2P';
-    //     this.startCtx.fillStyle="white";
-    //     this.startCtx.fillText("Elon's Crazy Day", 390, 225);
-    //   }, 100);
-    // }
-
   }]);
 
   return Start;
@@ -633,7 +627,7 @@ var Ambulance = function (_Car) {
     _this.sy = 28;
     _this.sWidth = 85;
     _this.sHeight = 213;
-    _this.xPos = 0;
+    _this.xPos = _this.getXPos();
     _this.yPos = 10;
     _this.dWidth = 50;
     _this.dHeight = 100;
@@ -689,7 +683,7 @@ var MiniTruck = function (_Car) {
     _this.sy = 25;
     _this.sWidth = 100;
     _this.sHeight = 220;
-    _this.xPos = 0;
+    _this.xPos = _this.getXPos();
     _this.yPos = 10;
     _this.dWidth = 50;
     _this.dHeight = 100;
@@ -745,7 +739,7 @@ var MiniVan = function (_Car) {
     _this.sy = 25;
     _this.sWidth = 85;
     _this.sHeight = 200;
-    _this.xPos = 0;
+    _this.xPos = _this.getXPos();
     _this.yPos = 10;
     _this.dWidth = 50;
     _this.dHeight = 100;
@@ -801,7 +795,7 @@ var Police = function (_Car) {
     _this.sy = 25;
     _this.sWidth = 100;
     _this.sHeight = 217;
-    _this.xPos = 0;
+    _this.xPos = _this.getXPos();
     _this.yPos = 10;
     _this.dWidth = 50;
     _this.dHeight = 100;
@@ -857,7 +851,7 @@ var Taxi = function (_Car) {
     _this.sy = 10;
     _this.sWidth = 102;
     _this.sHeight = 232;
-    _this.xPos = 0;
+    _this.xPos = _this.getXPos();
     _this.yPos = 10;
     _this.dWidth = 50;
     _this.dHeight = 100;
