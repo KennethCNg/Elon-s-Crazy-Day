@@ -20,19 +20,29 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var start = document.getElementById("canvas-start");
   var startCtx = background.getContext("2d");
   window.startCtx = startCtx;
-  const startScreen = new Start(startCtx, background, bgCtx);
+  // const startScreen = new Start(startCtx, background, bgCtx);
 
+  const game = new Game(bgCtx, background, carCtx);
 
   // Font needs to be loaded before called
+  // window.setTimeout( () => {
+  //   startCtx.font="36px PS2P";
+  //   startCtx.fillStyle="white";
+  //   startCtx.fillText("Elon's Crazy Day", 260, 225);
+  //   startCtx.font="22px PS2P";
+  //   startCtx.fillText(`Score: ${game.score}`, 435, 450);
+  // }, 325);
+
+
   window.setTimeout( () => {
-    startCtx.font="22px PS2P";
-    startCtx.fillStyle="white";
-    startCtx.fillText("Elon's Crazy Day", 370, 225);
-  }, 350);
+    bgCtx.font="36px PS2P";
+    bgCtx.fillStyle="white";
+    bgCtx.fillText("Elon's Crazy Day", 260, 225);
+    bgCtx.font="22px PS2P";
+    bgCtx.fillText(`Score: ${game.score}`, 435, 450);
+    bgCtx.globalCompositeOperation = "destination-over";
+  }, 325);
 
-
-  //
-  const game = new Game(bgCtx, background, carCtx);
   const player = game.player;
 
 
@@ -56,12 +66,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
       case "S":
       case "s":
         game.stopGame(); //need this so continuous presses on S don't work
+        bgCtx.globalCompositeOperation = "source-over";
         game.startGame();
         break;
-      // case "N":
-      // case "n":
-      //   game.stopGame();
-      // break;
     }
   });
 });

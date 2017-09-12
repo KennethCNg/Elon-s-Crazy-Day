@@ -183,17 +183,29 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var start = document.getElementById("canvas-start");
   var startCtx = background.getContext("2d");
   window.startCtx = startCtx;
-  var startScreen = new _start2.default(startCtx, background, bgCtx);
+  // const startScreen = new Start(startCtx, background, bgCtx);
+
+  var game = new _game2.default(bgCtx, background, carCtx);
 
   // Font needs to be loaded before called
-  window.setTimeout(function () {
-    startCtx.font = "22px PS2P";
-    startCtx.fillStyle = "white";
-    startCtx.fillText("Elon's Crazy Day", 370, 225);
-  }, 350);
+  // window.setTimeout( () => {
+  //   startCtx.font="36px PS2P";
+  //   startCtx.fillStyle="white";
+  //   startCtx.fillText("Elon's Crazy Day", 260, 225);
+  //   startCtx.font="22px PS2P";
+  //   startCtx.fillText(`Score: ${game.score}`, 435, 450);
+  // }, 325);
 
-  //
-  var game = new _game2.default(bgCtx, background, carCtx);
+
+  window.setTimeout(function () {
+    bgCtx.font = "36px PS2P";
+    bgCtx.fillStyle = "white";
+    bgCtx.fillText("Elon's Crazy Day", 260, 225);
+    bgCtx.font = "22px PS2P";
+    bgCtx.fillText('Score: ' + game.score, 435, 450);
+    bgCtx.globalCompositeOperation = "destination-over";
+  }, 325);
+
   var player = game.player;
 
   document.addEventListener("keydown", function (e) {
@@ -214,12 +226,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
       case "S":
       case "s":
         game.stopGame(); //need this so continuous presses on S don't work
+        bgCtx.globalCompositeOperation = "source-over";
         game.startGame();
         break;
-      // case "N":
-      // case "n":
-      //   game.stopGame();
-      // break;
     }
   });
 });
@@ -311,17 +320,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// import Truck from './truck';
-
-
 var Game = function () {
-  function Game(bgCtx, background, carCtx, startCtx) {
+  function Game(bgCtx, background, carCtx) {
     _classCallCheck(this, Game);
 
     // Game Logic
     this.score = -1;
     this.cars = [];
-    this.startCtx = startCtx;
+    this.gameOver = false;
 
     // Background
     this.background = background;
@@ -375,6 +381,15 @@ var Game = function () {
   }, {
     key: 'stopGame',
     value: function stopGame() {
+      if (this.gameOver) {
+        this.bgCtx.font = "36px PS2P";
+        this.bgCtx.fillStyle = "white";
+        this.bgCtx.fillText("GAME OVER", 390, 225);
+        this.bgCtx.font = "22px PS2P";
+        this.bgCtx.fillText('Score: ' + this.score, 445, 350);
+        this.bgCtx.fillText('Press S To Play Again', 325, 450);
+        this.bgCtx.globalCompositeOperation = "destination-over";
+      }
       this.score = 0;
       this.cars = [];
       cancelAnimationFrame(this.game);
@@ -485,10 +500,12 @@ var Game = function () {
         var car = this.cars[i];
         // player collides with right side of car
         if (this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > this.player.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
+          this.gameOver = true;
           this.stopGame();
 
           // player collides with left side of car
         } else if (car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
+          this.gameOver = true;
           this.stopGame();
         }
       }
