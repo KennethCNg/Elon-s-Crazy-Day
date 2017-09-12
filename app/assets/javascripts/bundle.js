@@ -130,7 +130,7 @@ var Car = function () {
   }, {
     key: "randomMove",
     value: function randomMove() {
-      var dy = Math.random() * 10;
+      var dy = Math.random() * 15;
       if (this.checkValidMove(0, dy)) {
         this.move(0, dy);
       } else {
