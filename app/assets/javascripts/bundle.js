@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     bgCtx.fillStyle = "white";
     bgCtx.fillText("Elon's Crazy Day", 260, 225);
     bgCtx.font = "22px PS2P";
-    bgCtx.fillText('Score: ' + game.score, 435, 450);
+    bgCtx.fillText('Press S To Start', 370, 450);
     bgCtx.globalCompositeOperation = "destination-over";
   }, 325);
 
