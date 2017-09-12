@@ -44,7 +44,6 @@
 
 
 
-
 <!-- RIGHT -->
       <div id="right">
         <div id="About-Me">
@@ -67,6 +66,18 @@
       </div>
     </div>
   </body>
-    <script type="text/javascript" src='./app/assets/javascripts/bundle.js'></script>
-
+  <script type="text/javascript" src='./app/assets/javascripts/bundle.js'></script>
+  <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyC-7aAjL3eIB9mMDjtF1Alu2l61oOVKTpA",
+      authDomain: "elon-s-crazy-day.firebaseapp.com",
+      databaseURL: "https://elon-s-crazy-day.firebaseio.com",
+      projectId: "elon-s-crazy-day",
+      storageBucket: "",
+      messagingSenderId: "856429743586"
+    };
+    firebase.initializeApp(config);
+  </script>
 </html>

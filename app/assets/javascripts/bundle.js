@@ -190,13 +190,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
     startCtx.font = "22px PS2P";
     startCtx.fillStyle = "white";
     startCtx.fillText("Elon's Crazy Day", 370, 225);
-  }, 275);
+  }, 350);
 
   //
   var game = new _game2.default(bgCtx, background, carCtx);
-
-  // need this after instance of game is made
-  // game.start();
   var player = game.player;
 
   document.addEventListener("keydown", function (e) {
@@ -355,6 +352,7 @@ var Game = function () {
       this.intervalScore = setInterval(this.drawScore.bind(this), 1000);
       this.score = 0;
 
+      // possibly have intervalSlowDown make the player's car move backwards for realism
       // let intervalSlowDown = setInterval(this.player.slowDown.bind(this), 500);
 
       // one car is *potentially* made every second
@@ -370,7 +368,6 @@ var Game = function () {
       this.player.render();
       this.renderCars();
 
-      // if ( !this.stop ) {
       this.game = requestAnimationFrame(this.animate.bind(this));
       this.didCollide();
       // }

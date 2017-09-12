@@ -28,14 +28,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     startCtx.font="22px PS2P";
     startCtx.fillStyle="white";
     startCtx.fillText("Elon's Crazy Day", 370, 225);
-  }, 275);
+  }, 350);
 
 
   //
   const game = new Game(bgCtx, background, carCtx);
-
-  // need this after instance of game is made
-  // game.start();
   const player = game.player;
 
 
