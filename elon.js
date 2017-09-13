@@ -24,16 +24,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   const game = new Game(bgCtx, background, carCtx);
 
-  // Font needs to be loaded before called
-  // window.setTimeout( () => {
-  //   startCtx.font="36px PS2P";
-  //   startCtx.fillStyle="white";
-  //   startCtx.fillText("Elon's Crazy Day", 260, 225);
-  //   startCtx.font="22px PS2P";
-  //   startCtx.fillText(`Score: ${game.score}`, 435, 450);
-  // }, 325);
-
-
   window.setTimeout( () => {
     bgCtx.font="36px PS2P";
     bgCtx.fillStyle="white";
@@ -44,9 +34,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }, 325);
 
   const player = game.player;
-
-
-
 
   document.addEventListener("keydown",function(e) {
     e.preventDefault();
