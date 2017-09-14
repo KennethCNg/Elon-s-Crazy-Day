@@ -1,1 +1,3 @@
 1. Scoping issues iterating through an array with forEach even though I used a fat-arrow function. I was within an anonymous function and couldn't call "this". I tried binding, but then was getting an error saying I couldn't bind to undefined. I could've declared the variable in the function right before I started the forEach loop, but I opted to use a for loop reason being it allowed me to keep "this" in scope but also return early.
+
+2. Having a font upload before the font method was called in was an issue. I needed to employ setTimeout ~300ms to ensure my had been loaded. It was my first time coming across this issue so the debugging was a pain. I eventually a couple friends and did some stackoverflow/googling myself to figure it out.

@@ -1,3 +1,7 @@
+[Live link][link]
+
+[link]: http://kennethcng.com/Elon-s-Crazy-Day/
+
 # Elon's Crazy Day!
 
 Elon's Crazy Day! is an arcade racing game where the player needs to navigate Elon and his Tesla Roadster to Tesla headquarters, and through the streets of Silicon Valley so he can convince investors to give Tesla another round of funding.
