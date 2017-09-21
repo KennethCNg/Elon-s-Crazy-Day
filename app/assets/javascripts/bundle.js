@@ -565,7 +565,7 @@ var Game = function () {
     value: function drawScore() {
       this.bgCtx.font = "15px PS2P";
       this.bgCtx.fillStyle = "white";
-      this.bgCtx.fillText("Score: " + this.score, 8, 20);
+      this.bgCtx.fillText("Score: $" + this.score, 8, 20);
     }
   }]);
 
