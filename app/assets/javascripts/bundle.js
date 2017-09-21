@@ -99,8 +99,6 @@ var MovingObject = function () {
   }, {
     key: "render",
     value: function render() {
-      // this.carCtx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
-      // this.carCtx.fillStyle="black";
       this.carCtx.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.xPos, this.yPos, this.dWidth, this.dHeight);
     }
   }, {
@@ -181,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   var start = document.getElementById("canvas-start");
   var startCtx = background.getContext("2d");
   window.startCtx = startCtx;
-  // const startScreen = new Start(startCtx, background, bgCtx);
 
   var game = new _game2.default(bgCtx, background, carCtx);
 
@@ -348,7 +345,6 @@ var Game = function () {
       this.yPosLineStart = 0;
       this.renderLines();
       this.intervalLine = setInterval(this.ossiliateLines.bind(this), 80);
-      // this.intervalScore = setInterval(this.drawScore.bind(this), 1000);
       this.score = 0;
 
       // possibly have intervalSlowDown make the player's car move backwards for realism
@@ -369,7 +365,7 @@ var Game = function () {
       this.renderMovingObjects();
 
       this.game = requestAnimationFrame(this.animate.bind(this));
-      this.didCollideWithCar();
+      this.didCollide();
     }
   }, {
     key: 'stopGame',
@@ -509,11 +505,12 @@ var Game = function () {
     // Game Logic
 
   }, {
-    key: 'didCollideWithCar',
-    value: function didCollideWithCar() {
+    key: 'didCollide',
+    value: function didCollide() {
       if (this.moneyCollision()) {
         this.score += 100;
-      } else if (this.carCollision()) {
+      }
+      if (this.carCollision()) {
         this.gameOver = true;
         this.stopGame();
       }
@@ -530,15 +527,12 @@ var Game = function () {
         } else if (car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
           return true;
           // player collides with top right side of car
-          // } else if ((car.xPos < this.player.xPos && car.xPos + car.dWidth - 10 > this.player.xPos) &&
-          //   ( this.player.yPos + this.player.dHeight - 8 > car.yPos && this.player.yPos < car.yPos)) {
-          //   return true;
+        } else if (car.xPos < this.player.xPos && car.xPos + car.dWidth - 10 > this.player.xPos && this.player.yPos + this.player.dHeight - 8 > car.yPos && this.player.yPos < car.yPos) {
+          return true;
           // player collides with top left side of car
-          // } else if ((car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos) &&
-          //   ( this.player.yPos + this.player.dHeight - 8 > car.yPos && this.player.yPos < car.yPos)) {
-          //   return true;
+        } else if (car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos && this.player.yPos + this.player.dHeight - 8 > car.yPos && this.player.yPos < car.yPos) {
+          return true;
         }
-        return false;
       }
     }
   }, {
@@ -559,7 +553,6 @@ var Game = function () {
         } else if (money.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > money.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos < money.yPos) {
           return true;
         }
-        return false;
       }
     }
   }, {

@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   var start = document.getElementById("canvas-start");
   var startCtx = background.getContext("2d");
   window.startCtx = startCtx;
-  // const startScreen = new Start(startCtx, background, bgCtx);
 
   const game = new Game(bgCtx, background, carCtx);
 
