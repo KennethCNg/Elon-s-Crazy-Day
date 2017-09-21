@@ -1,6 +1,6 @@
 import Start from './lib/start';
 import Game from './lib/game';
-import Car from './lib/car';
+import MovingObject from './lib/moving_object';
 
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");

@@ -78,12 +78,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Car = function () {
-  function Car(carCtx) {
-    _classCallCheck(this, Car);
+var MovingObject = function () {
+  function MovingObject(carCtx) {
+    _classCallCheck(this, MovingObject);
   }
 
-  _createClass(Car, [{
+  _createClass(MovingObject, [{
     key: "getXPos",
     value: function getXPos() {
       if (this.xPos) {
@@ -99,11 +99,9 @@ var Car = function () {
   }, {
     key: "render",
     value: function render() {
-      // this.image.onload = () => {
-      // this.carCtx.fillStyle = "black";
-      // this.carCtx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
+      this.carCtx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
+      this.carCtx.fillStyle = "black";
       this.carCtx.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.xPos, this.yPos, this.dWidth, this.dHeight);
-      // };
     }
   }, {
     key: "move",
@@ -139,10 +137,10 @@ var Car = function () {
     }
   }]);
 
-  return Car;
+  return MovingObject;
 }();
 
-exports.default = Car;
+exports.default = MovingObject;
 
 /***/ }),
 /* 1 */
@@ -159,9 +157,9 @@ var _game = __webpack_require__(3);
 
 var _game2 = _interopRequireDefault(_game);
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -186,16 +184,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   // const startScreen = new Start(startCtx, background, bgCtx);
 
   var game = new _game2.default(bgCtx, background, carCtx);
-
-  // Font needs to be loaded before called
-  // window.setTimeout( () => {
-  //   startCtx.font="36px PS2P";
-  //   startCtx.fillStyle="white";
-  //   startCtx.fillText("Elon's Crazy Day", 260, 225);
-  //   startCtx.font="22px PS2P";
-  //   startCtx.fillText(`Score: ${game.score}`, 435, 450);
-  // }, 325);
-
 
   window.setTimeout(function () {
     bgCtx.font = "36px PS2P";
@@ -288,9 +276,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 var _player = __webpack_require__(4);
 
@@ -316,6 +304,10 @@ var _taxi = __webpack_require__(9);
 
 var _taxi2 = _interopRequireDefault(_taxi);
 
+var _money = __webpack_require__(10);
+
+var _money2 = _interopRequireDefault(_money);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -326,7 +318,7 @@ var Game = function () {
 
     // Game Logic
     this.score = -1;
-    this.cars = [];
+    this.movingObjects = [];
     this.gameOver = false;
 
     // Background
@@ -370,13 +362,12 @@ var Game = function () {
     key: 'animate',
     value: function animate(time) {
       this.renderBackground();
-      this.destroyCars();
+      this.destroyMovingObject();
       this.player.render();
-      this.renderCars();
+      this.renderMovingObjects();
 
       this.game = requestAnimationFrame(this.animate.bind(this));
       this.didCollide();
-      // }
     }
   }, {
     key: 'stopGame',
@@ -391,37 +382,38 @@ var Game = function () {
         this.bgCtx.globalCompositeOperation = "destination-over";
       }
       this.score = 0;
-      this.cars = [];
+      this.movingObjects = [];
       cancelAnimationFrame(this.game);
       clearInterval(this.intervalLine);
       clearInterval(this.intervalCar);
       clearInterval(this.intervalScore);
     }
 
-    // CARS
-    // redraws all cars on the screen
+    // DRAWS MOVINGOBJECTS
+    // redraws all objects on the screen
 
   }, {
-    key: 'renderCars',
-    value: function renderCars() {
-      this.cars.forEach(function (car) {
-        car.randomMove();
-        car.render();
+    key: 'renderMovingObjects',
+    value: function renderMovingObjects() {
+      this.movingObjects.forEach(function (object) {
+        object.randomMove();
+        object.render();
       });
     }
-    // destroy car if they reached the of the canvas
+
+    // destroy object if they reached the end of the canvas
 
   }, {
-    key: 'destroyCars',
-    value: function destroyCars() {
+    key: 'destroyMovingObject',
+    value: function destroyMovingObject() {
       var dup = [];
-      for (var i = 0; i < this.cars.length; i++) {
-        if (this.cars[i].yPos < 950) {
-          dup.push(this.cars[i]);
+      for (var i = 0; i < this.movingObjects.length; i++) {
+        if (this.movingObjects[i].yPos < 950) {
+          dup.push(this.movingObjects[i]);
         }
       }
-      this.cars = dup;
-      return this.cars;
+      this.movingObjects = dup;
+      return this.movingObjects;
     }
 
     //cars are generated at random
@@ -431,17 +423,25 @@ var Game = function () {
     value: function initializeCarGenerator() {
       var prob = Math.floor(Math.random() * 5000);
       if (prob < 300 || prob > 4000) {
+        this.generateMoney();
         return this.initializeCarGenerator();
       } else {
         var IntervalId = setTimeout(this.generateCar.bind(this), 100);
       }
     }
   }, {
+    key: 'generateMoney',
+    value: function generateMoney() {
+      debugger;
+      var money = new _money2.default(this.carCtx);
+      this.movingObjects.push(money);
+    }
+  }, {
     key: 'generateCar',
     value: function generateCar() {
       var rand_cars = [new _ambulance2.default(this.carCtx), new _mini_truck2.default(this.carCtx), new _mini_van2.default(this.carCtx), new _police2.default(this.carCtx), new _taxi2.default(this.carCtx)];
       var car = rand_cars[Math.floor(Math.random() * 5)];
-      this.cars.push(car);
+      this.movingObjects.push(car);
     }
 
     // BACKGROUND
@@ -490,14 +490,11 @@ var Game = function () {
 
     // Game Logic
 
-    // not sure why collision isn't occuring as expected
-    // 1) when player is flush against the top of the canvas, crashing is not detected
-
   }, {
     key: 'didCollide',
     value: function didCollide() {
-      for (var i = 0; i < this.cars.length; i++) {
-        var car = this.cars[i];
+      for (var i = 0; i < this.movingObjects.length; i++) {
+        var car = this.movingObjects[i];
         // player collides with right side of car
         if (this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > this.player.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
           this.gameOver = true;
@@ -513,7 +510,6 @@ var Game = function () {
   }, {
     key: 'drawScore',
     value: function drawScore() {
-
       this.score += 1;
       this.bgCtx.font = "15px PS2P";
       this.bgCtx.fillStyle = "white";
@@ -537,9 +533,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -549,8 +545,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Player = function (_Car) {
-  _inherits(Player, _Car);
+var Player = function (_MovingObject) {
+  _inherits(Player, _MovingObject);
 
   function Player(carCtx) {
     _classCallCheck(this, Player);
@@ -583,7 +579,7 @@ var Player = function (_Car) {
 
 
   return Player;
-}(_car2.default);
+}(_moving_object2.default);
 
 exports.default = Player;
 
@@ -598,9 +594,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -610,8 +606,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Ambulance = function (_Car) {
-  _inherits(Ambulance, _Car);
+var Ambulance = function (_MovingObject) {
+  _inherits(Ambulance, _MovingObject);
 
   function Ambulance(carCtx) {
     _classCallCheck(this, Ambulance);
@@ -639,7 +635,7 @@ var Ambulance = function (_Car) {
   }
 
   return Ambulance;
-}(_car2.default);
+}(_moving_object2.default);
 
 exports.default = Ambulance;
 
@@ -654,9 +650,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -666,8 +662,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MiniTruck = function (_Car) {
-  _inherits(MiniTruck, _Car);
+var MiniTruck = function (_MovingObject) {
+  _inherits(MiniTruck, _MovingObject);
 
   function MiniTruck(carCtx) {
     _classCallCheck(this, MiniTruck);
@@ -695,7 +691,7 @@ var MiniTruck = function (_Car) {
   }
 
   return MiniTruck;
-}(_car2.default);
+}(_moving_object2.default);
 
 exports.default = MiniTruck;
 
@@ -710,9 +706,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -722,8 +718,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var MiniVan = function (_Car) {
-  _inherits(MiniVan, _Car);
+var MiniVan = function (_MovingObject) {
+  _inherits(MiniVan, _MovingObject);
 
   function MiniVan(carCtx) {
     _classCallCheck(this, MiniVan);
@@ -751,7 +747,7 @@ var MiniVan = function (_Car) {
   }
 
   return MiniVan;
-}(_car2.default);
+}(_moving_object2.default);
 
 exports.default = MiniVan;
 
@@ -766,9 +762,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -778,8 +774,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Police = function (_Car) {
-  _inherits(Police, _Car);
+var Police = function (_MovingObject) {
+  _inherits(Police, _MovingObject);
 
   function Police(carCtx) {
     _classCallCheck(this, Police);
@@ -807,7 +803,7 @@ var Police = function (_Car) {
   }
 
   return Police;
-}(_car2.default);
+}(_moving_object2.default);
 
 exports.default = Police;
 
@@ -822,9 +818,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _car = __webpack_require__(0);
+var _moving_object = __webpack_require__(0);
 
-var _car2 = _interopRequireDefault(_car);
+var _moving_object2 = _interopRequireDefault(_moving_object);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -834,8 +830,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Taxi = function (_Car) {
-  _inherits(Taxi, _Car);
+var Taxi = function (_MovingObject) {
+  _inherits(Taxi, _MovingObject);
 
   function Taxi(carCtx) {
     _classCallCheck(this, Taxi);
@@ -863,9 +859,65 @@ var Taxi = function (_Car) {
   }
 
   return Taxi;
-}(_car2.default);
+}(_moving_object2.default);
 
 exports.default = Taxi;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _moving_object = __webpack_require__(0);
+
+var _moving_object2 = _interopRequireDefault(_moving_object);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Money = function (_MovingObject) {
+  _inherits(Money, _MovingObject);
+
+  function Money(carCtx) {
+    _classCallCheck(this, Money);
+
+    var _this = _possibleConstructorReturn(this, (Money.__proto__ || Object.getPrototypeOf(Money)).call(this, carCtx));
+
+    var image = new Image();
+    image.src = "./app/assets/images/Money_bag.png";
+    _this.image = image;
+    _this.carCtx = carCtx;
+    _this.height = 100;
+    _this.width = 100;
+    _this.sx = 0;
+    _this.sy = 0;
+    _this.sWidth = 100;
+    _this.sHeight = 100;
+    _this.xPos = _this.getXPos();
+    _this.yPos = 10;
+    _this.dWidth = 25;
+    _this.dHeight = 25;
+    image.onload = function () {
+      carCtx.drawImage(image, _this.sx, _this.sy, _this.sWidth, _this.sHeight, _this.xPos, _this.yPos, _this.dWidth, _this.dHeight);
+    };
+    return _this;
+  }
+
+  return Money;
+}(_moving_object2.default);
+
+exports.default = Money;
 
 /***/ })
 /******/ ]);
