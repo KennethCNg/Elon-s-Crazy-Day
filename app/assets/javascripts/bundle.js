@@ -99,8 +99,8 @@ var MovingObject = function () {
   }, {
     key: "render",
     value: function render() {
-      this.carCtx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
-      this.carCtx.fillStyle = "black";
+      // this.carCtx.fillRect(this.xPos, this.yPos, this.dWidth, this.dHeight);
+      // this.carCtx.fillStyle="black";
       this.carCtx.drawImage(this.image, this.sx, this.sy, this.sWidth, this.sHeight, this.xPos, this.yPos, this.dWidth, this.dHeight);
     }
   }, {
@@ -317,8 +317,9 @@ var Game = function () {
     _classCallCheck(this, Game);
 
     // Game Logic
-    this.score = -1;
-    this.movingObjects = [];
+    this.score = 0;
+    this.cars = [];
+    this.moneys = [];
     this.gameOver = false;
 
     // Background
@@ -347,7 +348,7 @@ var Game = function () {
       this.yPosLineStart = 0;
       this.renderLines();
       this.intervalLine = setInterval(this.ossiliateLines.bind(this), 80);
-      this.intervalScore = setInterval(this.drawScore.bind(this), 1000);
+      // this.intervalScore = setInterval(this.drawScore.bind(this), 1000);
       this.score = 0;
 
       // possibly have intervalSlowDown make the player's car move backwards for realism
@@ -362,12 +363,13 @@ var Game = function () {
     key: 'animate',
     value: function animate(time) {
       this.renderBackground();
-      this.destroyMovingObject();
+      this.destroyCars();
+      this.destroyMoneys();
       this.player.render();
       this.renderMovingObjects();
 
       this.game = requestAnimationFrame(this.animate.bind(this));
-      this.didCollide();
+      this.didCollideWithCar();
     }
   }, {
     key: 'stopGame',
@@ -382,7 +384,8 @@ var Game = function () {
         this.bgCtx.globalCompositeOperation = "destination-over";
       }
       this.score = 0;
-      this.movingObjects = [];
+      this.cars = [];
+      this.moneys = [];
       cancelAnimationFrame(this.game);
       clearInterval(this.intervalLine);
       clearInterval(this.intervalCar);
@@ -395,25 +398,41 @@ var Game = function () {
   }, {
     key: 'renderMovingObjects',
     value: function renderMovingObjects() {
-      this.movingObjects.forEach(function (object) {
-        object.randomMove();
-        object.render();
+      this.cars.forEach(function (car) {
+        car.randomMove();
+        car.render();
+      });
+      this.moneys.forEach(function (money) {
+        money.randomMove();
+        money.render();
       });
     }
 
     // destroy object if they reached the end of the canvas
 
   }, {
-    key: 'destroyMovingObject',
-    value: function destroyMovingObject() {
+    key: 'destroyCars',
+    value: function destroyCars() {
       var dup = [];
-      for (var i = 0; i < this.movingObjects.length; i++) {
-        if (this.movingObjects[i].yPos < 950) {
-          dup.push(this.movingObjects[i]);
+      for (var i = 0; i < this.cars.length; i++) {
+        if (this.cars[i].yPos < 950) {
+          dup.push(this.cars[i]);
         }
       }
-      this.movingObjects = dup;
-      return this.movingObjects;
+      this.cars = dup;
+      return this.cars;
+    }
+  }, {
+    key: 'destroyMoneys',
+    value: function destroyMoneys() {
+      var dup = [];
+      for (var i = 0; i < this.moneys.length; i++) {
+        if (this.moneys[i].yPos < 950) {
+          dup.push(this.moneys[i]);
+        }
+      }
+      this.moneys = dup;
+      return this.moneys;
     }
 
     //cars are generated at random
@@ -432,16 +451,15 @@ var Game = function () {
   }, {
     key: 'generateMoney',
     value: function generateMoney() {
-      debugger;
       var money = new _money2.default(this.carCtx);
-      this.movingObjects.push(money);
+      this.moneys.push(money);
     }
   }, {
     key: 'generateCar',
     value: function generateCar() {
       var rand_cars = [new _ambulance2.default(this.carCtx), new _mini_truck2.default(this.carCtx), new _mini_van2.default(this.carCtx), new _police2.default(this.carCtx), new _taxi2.default(this.carCtx)];
       var car = rand_cars[Math.floor(Math.random() * 5)];
-      this.movingObjects.push(car);
+      this.cars.push(car);
     }
 
     // BACKGROUND
@@ -491,26 +509,62 @@ var Game = function () {
     // Game Logic
 
   }, {
-    key: 'didCollide',
-    value: function didCollide() {
-      for (var i = 0; i < this.movingObjects.length; i++) {
-        var car = this.movingObjects[i];
-        // player collides with right side of car
+    key: 'didCollideWithCar',
+    value: function didCollideWithCar() {
+      if (this.moneyCollision()) {
+        this.score += 100;
+      } else if (this.carCollision()) {
+        this.gameOver = true;
+        this.stopGame();
+      }
+    }
+  }, {
+    key: 'carCollision',
+    value: function carCollision() {
+      for (var i = 0; i < this.cars.length; i++) {
+        var car = this.cars[i];
+        // player collides with bottom right side of car
         if (this.player.xPos > car.xPos && car.xPos + car.dWidth - 10 > this.player.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
-          this.gameOver = true;
-          this.stopGame();
-
-          // player collides with left side of car
+          return true;
+          // player collides with bottom left side of car
         } else if (car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos && car.yPos + car.dHeight - 8 > this.player.yPos && this.player.yPos > car.yPos) {
-          this.gameOver = true;
-          this.stopGame();
+          return true;
+          // player collides with top right side of car
+          // } else if ((car.xPos < this.player.xPos && car.xPos + car.dWidth - 10 > this.player.xPos) &&
+          //   ( this.player.yPos + this.player.dHeight - 8 > car.yPos && this.player.yPos < car.yPos)) {
+          //   return true;
+          // player collides with top left side of car
+          // } else if ((car.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > car.xPos) &&
+          //   ( this.player.yPos + this.player.dHeight - 8 > car.yPos && this.player.yPos < car.yPos)) {
+          //   return true;
         }
+        return false;
+      }
+    }
+  }, {
+    key: 'moneyCollision',
+    value: function moneyCollision() {
+      for (var i = 0; i < this.moneys.length; i++) {
+        var money = this.moneys[i];
+        // player collides with bottom right side of money
+        if (this.player.xPos > money.xPos && money.xPos + money.dWidth - 10 > this.player.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos > money.yPos) {
+          return true;
+          // player collides with bottom left side of money
+        } else if (money.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > money.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos > money.yPos) {
+          return true;
+          // player collides with top left side of money
+        } else if (money.xPos < this.player.xPos && money.xPos + money.dWidth - 10 > this.player.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos < money.yPos) {
+          return true;
+          // player collides with top right side of money
+        } else if (money.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > money.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos < money.yPos) {
+          return true;
+        }
+        return false;
       }
     }
   }, {
     key: 'drawScore',
     value: function drawScore() {
-      this.score += 1;
       this.bgCtx.font = "15px PS2P";
       this.bgCtx.fillStyle = "white";
       this.bgCtx.fillText("Score: " + this.score, 8, 20);
