@@ -423,7 +423,7 @@ var Game = function () {
     value: function destroyMoneys() {
       var dup = [];
       for (var i = 0; i < this.moneys.length; i++) {
-        if (this.moneys[i].yPos < 950) {
+        if (this.moneys[i].yPos < 965) {
           dup.push(this.moneys[i]);
         }
       }
@@ -541,21 +541,21 @@ var Game = function () {
       for (var i = 0; i < this.moneys.length; i++) {
         var money = this.moneys[i];
         // player collides with bottom right side of money
-        // setting money.yPos = 951 has it destroyed at the next frame
+        // setting money.yPos = 966 has it destroyed at the next frame
         if (this.player.xPos > money.xPos && money.xPos + money.dWidth - 10 > this.player.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos > money.yPos) {
-          money.yPos = 951;
+          money.yPos = 966;
           return true;
           // player collides with bottom left side of money
         } else if (money.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > money.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos > money.yPos) {
-          money.yPos = 951;
+          money.yPos = 966;
           return true;
           // player collides with top left side of money
         } else if (money.xPos < this.player.xPos && money.xPos + money.dWidth - 10 > this.player.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos < money.yPos) {
-          money.yPos = 951;
+          money.yPos = 966;
           return true;
           // player collides with top right side of money
         } else if (money.xPos > this.player.xPos && this.player.xPos + this.player.dWidth - 10 > money.xPos && money.yPos + money.dHeight - 8 > this.player.yPos && this.player.yPos < money.yPos) {
-          money.yPos = 951;
+          money.yPos = 966;
           return true;
         }
       }
