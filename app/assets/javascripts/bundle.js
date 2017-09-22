@@ -375,7 +375,7 @@ var Game = function () {
         this.bgCtx.fillStyle = "white";
         this.bgCtx.fillText("GAME OVER", 390, 225);
         this.bgCtx.font = "22px PS2P";
-        this.bgCtx.fillText('Score: ' + this.score, 445, 350);
+        this.bgCtx.fillText('Score: $' + ('' + this.score), 445, 350);
         this.bgCtx.fillText('Press S To Play Again', 325, 450);
         this.bgCtx.globalCompositeOperation = "destination-over";
       }

@@ -1,46 +1,21 @@
-[Live link][link]
+# Elon's Crazy Day!
+
+[Play here][link]
 
 [link]: http://kennethcng.com/Elon-s-Crazy-Day/
 
-# Elon's Crazy Day!
+![alt text](Elon-s-Crazy-Day/app/assets/images/Screenshot.png)
 
-Elon's Crazy Day! is an arcade racing game where the player needs to navigate Elon and his Tesla Roadster to Tesla headquarters, and through the streets of Silicon Valley so he can convince investors to give Tesla another round of funding.
+## Background
 
-Press S to start/restart the game, and move using the arrow keys.
+Elon Musk has a board meeting with investors, and Tesla Roadster's auto-pilot isn't working. On the bright side, Bill Gates dropped bags of money all along the highway, so grab it on your way! Use the arrow keys to navigate through Highway 888, but make sure you don't crash or Elon will have another lawsuit on his hands.
 
-## Technologies, Libraries, and APIs
+## How To Play
 
-This game utilizes JavaScript and HTML5 Canvas to draw the game. NPM is the package manager of choice. Webpack is used for file bundling and Babel is used to ensure any ES6 language is properly understood by older browsers.
+Press S to start/restart the game. Move around using the arrow keys.
 
-## Prerequisites
+## Features
 
-In order to run this game locally, you'll just need to run 'npm install' in your terminal. After the necessary dependencies have been installed, copy the path to the index file and run it in your favorite browser (which means Chrome).
+### Rendering and Sprites
 
-Also, this is best run on Google Chrome.
-
-## MVP (Minimum Viable Product)
-
-Player should be able to start the game, and move left and right to dodge traffic. Points will be awarded based on distance travelled.
-
-### Bonus
-
-Include some logic that randomly generates a hyper-loop tunnel that increases speed.
-Include a Space-X rocketship that instantly increases distance travelled.
-
-
-## Implementation Timeline
-
-### Day 1
-  Learn how to create a canvas and objects. Learn how to render/move objects.
-
-### Day 2
-  Learn how to implement Easel and take in player input.
-
-### Day 3
-  Have start game and end game logic
-
-### Day 4
-  Implement updating objects and finish main game loop
-
-### Day 5
-  Inevitable worrying
+This game utilizes JavaScript and HTML5 Canvas to draw the game. There are actually two layers of Canvas, one for the background, and another for the cars and money bags. By separating the responsibilities of the two, it simplifies the drawing of the sprites by ensuring the background is always in the back.
