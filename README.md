@@ -4,7 +4,7 @@
 
 [link]: http://kennethcng.com/Elon-s-Crazy-Day/
 
-![alt text](Elon-s-Crazy-Day/app/assets/images/Screenshot.png)
+![screenshot](./app/assets/images/Screenshot.png)
 
 ## Background
 
