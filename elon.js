@@ -6,19 +6,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
   console.log("DOM fully loaded and parsed");
 
   // background
-  var background = document.getElementById("canvas-background");
-  var bgCtx = background.getContext("2d");
+  let background = document.getElementById("canvas-background");
+  let bgCtx = background.getContext("2d");
   background.borders = background.width / 4;
   window.bgCtx = bgCtx;
 
   // cars
-  var cars = document.getElementById("canvas-car");
-  var carCtx = background.getContext("2d");
+  let cars = document.getElementById("canvas-car");
+  let carCtx = background.getContext("2d");
   window.carCtx = carCtx;
 
   // start
-  var start = document.getElementById("canvas-start");
-  var startCtx = background.getContext("2d");
+  let start = document.getElementById("canvas-start");
+  let startCtx = background.getContext("2d");
   window.startCtx = startCtx;
 
   const game = new Game(bgCtx, background, carCtx);
