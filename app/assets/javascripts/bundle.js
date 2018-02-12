@@ -324,19 +324,12 @@ var Game = function () {
     this.bgCtx = bgCtx;
     this.carCtx = carCtx;
     this.backgroundDividers = background.width / 4;
-    this.yPosLineStart;
     this.renderLines();
     this.renderBackground();
 
     // Player
     var player = new _player2.default(this.carCtx);
     this.player = player;
-
-    // game control variables
-    this.game;
-    this.intervalLine;
-    this.intervalCar;
-    this.intervalScore;
   }
 
   _createClass(Game, [{
