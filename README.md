@@ -2,7 +2,7 @@
 
 [Play here][link]
 
-[link]: http://kennethcng/github.io/Elon-s-Crazy-Day/
+[link]: https://kennethcng.github.io/Elon-s-Crazy-Day/
 
 ![screenshot](./app/assets/images/Screenshot.png)
 
